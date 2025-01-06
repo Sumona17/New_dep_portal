@@ -1,0 +1,20 @@
+LenderTypeLabel,LenderTypeValue,FinancialInterestLabel,FinancialInterestValue,PurchasedLeasedLabel,PurchasedLeasedValue,CauseofLossLabel,CauseofLossValue,DriverNameLabel,DriverNameValue
+Leinholder/Loss Payee,leinholderlosspayee,Select,select,Owned,owned,Animal,Animal,Parked,Parked
+Additional Insured - Lessor,additionalinsuredlessor,,,Rented,rented,Collision Backing Loss,Collision Backing Loss,Permissive Use,Permissive Use
+Additional Interest - Trust,additionalinteresttrust,,,Leased,leased,Collision Intersection Loss,Collision Intersection Loss,Non-Permissive Use,Non-Permissive Use
+Contents Plus,contentsplus,,,,,Collision Lane Change,Collision Lane Change,Unscheduled Driver,Unscheduled Driver
+,,,,,,Collision Parked Loss,Collision Parked Loss,None,None
+,,,,,,Collision Rear-end Loss,Collision Rear-end Loss,,
+,,,,,,Collision Swerved To Avoid Unknown Object,Collision Swerved To Avoid Unknown Object,,
+,,,,,,Collision with Fixed Object,Collision with Fixed Object,,
+,,,,,,Collision with Motorcycle,Collision with Motorcycle,,
+,,,,,,Collision with Pedestrian or Bicylist,Collision with Pedestrian or Bicylist,,
+,,,,,,Collision with Train or Bus,Collision with Train or Bus,,
+,,,,,,Collision: Rollover Vehicle,Collision: Rollover Vehicle,,
+,,,,,,Fire,Fire,,
+,,,,,,Flood,Flood,,
+,,,,,,Glass,Glass,,
+,,,,,,Other,Other,,
+,,,,,,Tow Reimbursement,Tow Reimbursement,,
+,,,,,,Roadside Assistance,Roadside Assistance,,
+,,,,,,Single Vehicle Accident,Single Vehicle Accident,,

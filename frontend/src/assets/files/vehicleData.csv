@@ -1,0 +1,7 @@
+ALBLabel,ALBValue,VehicleUseLabel,VehicleUseValue,UnacceptableVehicleLabel,UnacceptableVehicleValue,SalvageHistoryLabel,SalvageHistoryValue,GarageAddressLabel,GarageAddressValue
+Yes,yes,Pleasure,pleasure,Yes,yes,Yes,yes,Yes,yes
+No,no,To and From Work,to_and_from_work,No,no,No,no,No,no
+,,Business,business,,,,,,
+,,Farm,farm,,,,,,
+,,TNC,tnc,,,,,,
+,,Delivery,delivery,,,,,,

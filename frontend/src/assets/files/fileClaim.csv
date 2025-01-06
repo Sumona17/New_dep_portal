@@ -1,0 +1,19 @@
+LossCauseLabel,LossCauseValue,LossOccurredLabel,LossOccurredValue,ThirdPartyLabel,ThirdPartyValue,CoverageTypeLabel,CoverageTypeValue,CoverageSubTypeLabel,CoverageSubTypeValue,InsuredRelationshipLabel,InsuredRelationshipValue
+Animal,Animal,At premises,At premises,Yes,Yes,Collision,Collision,Collision,Collision,Self/Insured,Self/Insured
+Collision while turning left,Collision while turning left,In transit,In transit,No,No,Comprehensive,Comprehensive,Comprehensive,Comprehensive,Agent,Agent
+Collision with bicycle,Collision with bicycle,Other,Other,,,Liability,Liability,Liability - Bodily Injury,Liability - Bodily Injury,Attorney,Attorney
+Collision with fixed object code,Collision with fixed object code,,,,,,,Liability - PD,Liability - PD,Employee,Employee
+Collision with motor vehicle,Collision with motor vehicle,,,,,,,Liability - Vehicle Damage,Liability - Vehicle Damage,Claimant,Claimant
+Collision with other object,Collision with other object,,,,,,,,,Claimant's attorney,Claimant's attorney
+Collision with pedestrian,Collision with pedestrian,,,,,,,,,Claimant's insurance co.,Claimant's insurance co.
+Collision with train or bus,Collision with train or bus,,,,,,,,,Rental representative,Rental representative
+Damage in loading or unloading,Damage in loading or unloading,,,,,,,,,Repair shop,Repair shop
+Falling or moving object,Falling or moving object,,,,,,,,,Other,Other
+Fire,Fire,,,,,,,,,,
+Glass breakage,Glass breakage,,,,,,,,,,
+Malicious mischief and vandalism,Malicious mischief and vandalism,,,,,,,,,,
+Rear-end collision,Rear-end collision,,,,,,,,,,
+Riot and civil commotion,Riot and civil commotion,,,,,,,,,,
+Rollover,Rollover,,,,,,,,,,
+Theft Audio or other parts,Theft Audio or other parts,,,,,,,,,,
+Theft of entire vehicle,Theft of entire vehicle,,,,,,,,,,

@@ -1,0 +1,12 @@
+UMLabel,UMValue,UIMLabel,UIMValue,ReferrerBreakdownLabel,ReferrerBreakdownValue,Deductible2Label,Deductible2Value,TowStorageLimitLabel,TowStorageLimitValue,TowStorageDeductibleLabel,TowStorageDeductibleValue,LiabilityLabel,LiabilityValue,DedLabel,DedValue,DeductibleLabel,DeductibleValue
+Rejected,rejected,Rejected,rejected,Yes,yes,"$2,500 ",twentyfivehundred,"5,000",fivethousand,2500,2500,"$1,500,000 ","$1,500,000 ","$1,000 ","$1,000 ","$1,000 ","$1,000 "
+15/30,thirty,15/30,thirty,No,no,"$15,000 ",fifteenthousand,"7,500",seventhousandfivehundred,15000,15000,"$1,000,000 ","$1,000,000 ","$1,500 ","$1,500 ","$2,500 ","$2,500 "
+30/60,sixty,30/60,sixty,,,,,,,,,"$750,000 ","$750,000 ","$2,000 ","$2,000 ","$3,500 ","$3,500 "
+,,,,,,,,,,,,"$500,000 ","$500,000 ","$2,500 ","$2,500 ","$5,000 ","$5,000 "
+,,,,,,,,,,,,"$300,000 ","$300,000 ","$3,000 ","$3,000 ","$7,500 ","$7,500 "
+,,,,,,,,,,,,"$250,000 ","$250,000 ","$3,500 ","$3,500 ","$10,000 ","$10,000 "
+,,,,,,,,,,,,"$100,000 ","$100,000 ","$4,000 ","$4,000 ",,
+,,,,,,,,,,,,,,"$4,500 ","$4,500 ",,
+,,,,,,,,,,,,,,"$5,000 ","$5,000 ",,
+,,,,,,,,,,,,,,"$7,500 ","$7,500 ",,
+,,,,,,,,,,,,,,"$10,000 ","$10,000 ",,

@@ -1,0 +1,125 @@
+InsuredTypeLabel,InsuredTypeValue,YearsInBusinessLabel,YearsInBusinessValue,RadiusOfOperationLabel,RadiusOfOperationValue,StateLabel,StateValue,NatureOfBusinessLabel,NatureOfBusinessValue,CommoditiesHauledLabel,CommoditiesHauledValue
+Individual,individual,New Venture,new,0-100 miles,onehundred,Arizona,az,Long Haul - Reefer/Dry,reeferdry,Agriculture Waste,agriculturewaste
+Commercial,commercial,1 year,one,101-500 miles,fivehundred,California,ca,Long Haul - Dry,longhaul,Alcohol,alcohol
+,,2 years,two,501+ miles,fivehundredplus,Florida,fl,State Only,stateonly,Alfalfa,alfalfa
+,,3 years,three,,,Illinois,il,5 State,fivestate,Almonds,almonds
+,,4 years,four,,,Kansas,ka,10 State,tenstate,Animal Feed,animalfeed
+,,4+ years,fourplus,,,Nevada,nv,Tanker - Non-HazMat ,nonhazmat,Appliances,appliances
+,,,,,,New Jersey,nj,Tanker - With HazMat,hazmat,Asphalt,asphalt
+,,,,,,Oregon,or,Sand &amp; Gravel,sandgravel,Auto Parts,autoparts
+,,,,,,Texas,tx,Car Carrier - Long Haul,longhaulcarrier,Autos,autos
+,,,,,,Washington,wa,Car Carrier - State Only,stateonlycarrier,Backhoe,backhoe
+,,,,,,,,Household Goods Mover/s,movers,Beams,beams
+,,,,,,,,Tow Truck,towtruck,Beans,beans
+,,,,,,,,Mobile Homes,mobilehomes,Beer & Wine,beerwine
+,,,,,,,,Flat bed,flatbed,Beverages,beverages
+,,,,,,,,Live Stock,livestock,Boats,boats
+,,,,,,,,Container Hauler,container,Bottled Water,bottledwater
+,,,,,,,,Ice Cream Truck ,icecream,Bricks,bricks
+,,,,,,,,Utility Vehicle/Services,utilityservices,Building Materials,buildingmaterials
+,,,,,,,,Garbage and Debri Construction and Landscaping,constructiondebris,Candy,candy
+,,,,,,,,"Garbage, Debri and Refused Trash from House",housetrash,Canned Goods,cannedgoods
+,,,,,,,,"Forest Logs, Beams and Lumber",forestlogs,Cans,cans
+,,,,,,,,Coal/Coke,coalcoke,Carpets/Rugs,carpetsrugs
+,,,,,,,,Auto Hauler,autohauler,Cement,cement
+,,,,,,,,,,Ceramic,ceramic
+,,,,,,,,,,Cereal,cereal
+,,,,,,,,,,Cheese,cheese
+,,,,,,,,,,Chilled Foods,chilledfoods
+,,,,,,,,,,Clean Dirt,cleandirt
+,,,,,,,,,,Cleaning Products,cleaningproducts
+,,,,,,,,,,Clothing,clothing
+,,,,,,,,,,"Clothing (non designer) Shoes, Slippers",clothingnondesigner
+,,,,,,,,,,Coils,coils
+,,,,,,,,,,Compost,compost
+,,,,,,,,,,Computer Accessories/Games,computeraccessories
+,,,,,,,,,,Concrete,concrete
+,,,,,,,,,,Construction Debris,constructiondebris
+,,,,,,,,,,Construction Material,constructionmaterial
+,,,,,,,,,,Containers,containers
+,,,,,,,,,,Copper Wire,copperwire
+,,,,,,,,,,Cotton,cotton
+,,,,,,,,,,Cow Feed,cowfeed
+,,,,,,,,,,Crushed Concrete,crushedconcrete
+,,,,,,,,,,Dairy Products (Non Reefer),dairyproductsnonreefer
+,,,,,,,,,,Dairy Products (Reefer),dairyproductsreefer
+,,,,,,,,,,Debris,debris
+,,,,,,,,,,Department Store Merchandise,departmentstoremerchandise
+,,,,,,,,,,Dog Food,dogfood
+,,,,,,,,,,Draft,draft
+,,,,,,,,,,Drums Filled with Drilling Mud,drumsdrillingmud
+,,,,,,,,,,Dry Asphalt,dryasphalt
+,,,,,,,,,,Dry Cement,drycement
+,,,,,,,,,,Dry Concrete,dryconcrete
+,,,,,,,,,,Dry Groceries,drygroceries
+,,,,,,,,,,Dry Wall,drywall
+,,,,,,,,,,Eggs,eggs
+,,,,,,,,,,Electronics,electronics
+,,,,,,,,,,Empty Cans,emptycans
+,,,,,,,,,,Empty Cardboard/Wood Boxes,emptycardboardwoodboxes
+,,,,,,,,,,Explosives,explosives
+,,,,,,,,,,Fertilizers,fertilizers
+,,,,,,,,,,Fish,fish
+,,,,,,,,,,Fish (Packaged),fishpackaged
+,,,,,,,,,,Fish Raw,fishraw
+,,,,,,,,,,Flour,flour
+,,,,,,,,,,Flowers,flowers
+,,,,,,,,,,Food Products,foodproducts
+,,,,,,,,,,Forest Lumber,forestlumber
+,,,,,,,,,,Forklifts,forklifts
+,,,,,,,,,,Fracking Sand Non-Hazmat,frackingsand
+,,,,,,,,,,Frozen Chicken,frozenchicken
+,,,,,,,,,,Frozen Produce,frozenproduce
+,,,,,,,,,,Fruit,fruit
+,,,,,,,,,,Fruit (Non Reefer),fruitnonreefer
+,,,,,,,,,,Furniture Old,furnitureold
+,,,,,,,,,,Galvanized Metal Frames,galvanizedmetalframes
+,,,,,,,,,,Garbage,garbage
+,,,,,,,,,,Grain,grain
+,,,,,,,,,,Granite,granite
+,,,,,,,,,,Gravel/Gravel Fill,gravel
+,,,,,,,,,,Hardware Supplies,hardwaresupplies
+,,,,,,,,,,Hay/Hay Bales,haybales
+,,,,,,,,,,Insulation,insulation
+,,,,,,,,,,Intermodal Containers,intermodalcontainers
+,,,,,,,,,,Landscaping,landscaping
+,,,,,,,,,,Light Machinery,lightmachinery
+,,,,,,,,,,Liquors,liquors
+,,,,,,,,,,Livestock,livestock
+,,,,,,,,,,Logs (Home Depot),logs
+,,,,,,,,,,Lumber,lumber
+,,,,,,,,,,Machinery,machinery
+,,,,,,,,,,Machinery Small Parts,machineryparts
+,,,,,,,,,,Mattress,mattress
+,,,,,,,,,,Meat,meat
+,,,,,,,,,,Metal Coils,metalcoils
+,,,,,,,,,,Metal Drums,metaldrums
+,,,,,,,,,,Metal Plates,metalplates
+,,,,,,,,,,Metal Sheets,metalsheets
+,,,,,,,,,,Milk & Cream,milkcream
+,,,,,,,,,,Mobile Homes,mobilehomes
+,,,,,,,,,,Mulch and Soil,mulchsoil
+,,,,,,,,,,New And Used Cars,newusedcars
+,,,,,,,,,,New Furniture,newfurniture
+,,,,,,,,,,Non Brand Clothing,nonbrandclothing
+,,,,,,,,,,Nuts,nuts
+,,,,,,,,,,Office Equipment,officeequipment
+,,,,,,,,,,Office Supplies,officesupplies
+,,,,,,,,,,Oilfield Equipment,oilfieldequipment
+,,,,,,,,,,Pallets,pallets
+,,,,,,,,,,Paper,paper
+,,,,,,,,,,Petroleum,petroleum
+,,,,,,,,,,Pipe,pipe
+,,,,,,,,,,Pipes/Fittings,pipesfittings
+,,,,,,,,,,Plastic Bottles/Plastic Items,plasticbottles
+,,,,,,,,,,Plastic Items,plasticitems
+,,,,,,,,,,Plywood,plywood
+,,,,,,,,,,Poultry,poultry
+,,,,,,,,,,Produce,produce
+,,,,,,,,,,Produce (Non Reefer),producenonreefer
+,,,,,,,,,,Recycled Materials,recycledmaterials
+,,,,,,,,,,Reefer Goods,reefergoods
+,,,,,,,,,,Roofing Shingles,roofingshingles
+,,,,,,,,,,Sand and Gravel,sandgravel
+,,,,,,,,,,Scrap Metal,scrapmetal
+,,,,,,,,,,Seafood,seafood

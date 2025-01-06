@@ -1,0 +1,23 @@
+{
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "globals": {
+      "Promise": "readonly"
+    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "plugins": ["react", "react-hooks"],
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "react/prop-types": "off",
+      "no-unused-vars": "error"
+    }
+  }
+  
