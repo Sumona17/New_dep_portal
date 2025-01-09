@@ -37,6 +37,7 @@ import Premiumtrust from 'pages/Dashboard/DashboardSubFeatures/Premiumtrust';
 import Producerlossratio from 'pages/Dashboard/DashboardSubFeatures/Producerlossratio';
 import HeraldProduct from 'pages/Herald/HeraldProduct';
 import HeraldForm from 'pages/Herald/HeraldForm';
+import QuotePage from 'pages/Herald/QuotePage';
 
 export const LoginRoute = {
     component: Login,
@@ -128,6 +129,12 @@ export const CreateHeraldProduct = {
 export const CreateHeraldForm = {
   component: HeraldForm,
   path: '/herald-form',
+  restricted: true,
+}
+
+export const CreateQuotePage = {
+  component: QuotePage,
+  path: '/quote-page',
   restricted: true,
 }
 
@@ -308,6 +315,7 @@ const IRouteS = {
       CreateFloodQuote,
       CreateHeraldProduct,
       CreateHeraldForm,
+      CreateQuotePage,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,
@@ -346,6 +354,7 @@ const IRouteS = {
       CreateFloodQuote,
       CreateHeraldProduct,
       CreateHeraldForm,
+      CreateQuotePage,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,

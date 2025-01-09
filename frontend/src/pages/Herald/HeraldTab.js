@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Select, DatePicker, Button, message, Spin, Ta
 import axios from "axios";
 import moment from "moment";
 import { FormInputFeild } from "styles/components/FormControl";
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useMetaData from "context/metaData";
 import { useLocation } from "react-router-dom";
 
@@ -19,11 +19,11 @@ const DynamicForm = () => {
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: null });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
-//   const [riskValuesData, setRiskValuesData] = useState({});
-//   const [coverageValuesData, setCoverageValuesData] = useState({});
+  const [riskValuesData, setRiskValuesData] = useState({});
+  const [coverageValuesData, setCoverageValuesData] = useState({});
 //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
   const [prefillDataCache, setPrefillDataCache] = useState({});
-//   const navigate = useNavigate();
+const navigate = useNavigate();
 const location = useLocation();
 const selectedProducts = location.state?.selectedProducts || [];
 const {theme} = useMetaData();
@@ -89,8 +89,8 @@ const {theme} = useMetaData();
   const handleNext = async () => {
     try {
       // Validate and save Risk Values data
-    //   const riskValues = await form.validateFields();
-    //   setRiskValuesData(riskValues);
+      const riskValues = await form.validateFields();
+      setRiskValuesData(riskValues);
 
       // Switch to Coverage Values tab
       setCurrentTab("coverage_values");
@@ -318,14 +318,14 @@ const {theme} = useMetaData();
   };
 
 
-//   const handleGetQuote = () => {
-//     navigate('/new-submission/quotedetails', {
-//       state: {
-//         formData: { ...riskValuesData, ...coverageValuesData },
-//         applicationData
-//       }
-//     });
-//   }
+  const handleGetQuote = () => {
+    navigate('/quote-page', {
+      state: {
+        formData: { ...riskValuesData, ...coverageValuesData },
+        applicationData
+      }
+    });
+  }
 
   // Updated handlePrefill function
  const handlePrefill = async () => {
@@ -488,7 +488,7 @@ const {theme} = useMetaData();
             Close
           </Button>
           {isSuccess && (
-            <Button type="primary" >
+            <Button type="primary" onClick={handleGetQuote} >
               Get Quote
             </Button>
           )}

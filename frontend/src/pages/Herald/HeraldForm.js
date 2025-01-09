@@ -9,10 +9,11 @@ import { CreateQuote } from 'styles/pages/CreateQuote/index';
 
 import useMetaData from "context/metaData";
 import DynamicForm from './HeraldTab';
+import QuotePage from './QuotePage';
 const HeraldForm = () => {
     const {theme} = useMetaData();
     const { state } = useLocation();
-    const steps = ['Fill Application', 'Submit Application', 'Get a Quote', ];
+    const steps = ['Application', 'Submit Application', 'Quote', ];
     const [activeStep, setActiveStep] = useState(0);
     const [open, setOpen] = useState(false);
     
@@ -92,11 +93,11 @@ const HeraldForm = () => {
     // Conditionally render forms based on activeStep
     const renderFormContent = () => {
         switch (steps[activeStep]) {
-            case 'Fill Application':
+            case 'Application':
                 return<DynamicForm state={state} open={open} setOpen={setOpen} theme={theme}/>;
                 
-            // case 'Submit Application':
-            // //     return <Vehicle handleVehicleRemoval={handleVehicleRemoval} theme={theme} handleVehicleAddition={handleVehicleAddition} vehicleCheckBox={vehicleCheckBox} handleVehicleCheckBoxChange={handleVehicleCheckBoxChange} vehicleData={vehicleData} state={state} TabName="Comproperty" />;
+            case 'Submit Application':
+                return<QuotePage state={state} open={open} setOpen={setOpen} theme={theme}/>;
             // case 'Get a Quote':
             //     return <Driver handleDriverRemoval={handleDriverRemoval} theme={theme} handleDriverAddition={handleDriverAddition} driverCheckBox={driverCheckBox} handleDriverCheckBoxChange={handleDriverCheckBoxChange} driverData={driverData} state={state} TabName="Comproperty" />;
             // // case 'Coverages':
