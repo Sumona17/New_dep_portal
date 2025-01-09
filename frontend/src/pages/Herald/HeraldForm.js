@@ -13,7 +13,7 @@ import QuotePage from './QuotePage';
 const HeraldForm = () => {
     const {theme} = useMetaData();
     const { state } = useLocation();
-    const steps = ['Application', 'Submit Application', 'Quote', ];
+    const steps = ['Application Details', 'Review and Submit', 'Quote', ];
     const [activeStep, setActiveStep] = useState(0);
     const [open, setOpen] = useState(false);
     
@@ -93,12 +93,12 @@ const HeraldForm = () => {
     // Conditionally render forms based on activeStep
     const renderFormContent = () => {
         switch (steps[activeStep]) {
-            case 'Application':
+            case 'Application Details':
                 return<DynamicForm state={state} open={open} setOpen={setOpen} theme={theme}/>;
                 
-            case 'Submit Application':
+            case 'Quote':
                 return<QuotePage state={state} open={open} setOpen={setOpen} theme={theme}/>;
-            // case 'Get a Quote':
+            // case 'Submit':
             //     return <Driver handleDriverRemoval={handleDriverRemoval} theme={theme} handleDriverAddition={handleDriverAddition} driverCheckBox={driverCheckBox} handleDriverCheckBoxChange={handleDriverCheckBoxChange} driverData={driverData} state={state} TabName="Comproperty" />;
             // // case 'Coverages':
             //     return <Coverages state={state} open={open} setOpen={setOpen} theme={theme} viewPolicy={viewPolicy} setViewPolicy={setViewPolicy} TabName="Comproperty" />

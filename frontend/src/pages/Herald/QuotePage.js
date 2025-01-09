@@ -74,7 +74,7 @@ const QuotePage = () => {
 
 
   const handleGetQuote = (quote) => {
-    navigate('/new-submission/quotedetails', {
+    navigate('/quotedetails', {
       state: { 
         formData: location.state?.formData, 
         applicationData: location.state?.applicationData,
@@ -88,7 +88,7 @@ const QuotePage = () => {
 
   const handleSubmitQuote = () => {
     message.success('Quote submitted successfully!');
-    navigate('/new-submission');
+    navigate('/herald-form');
   };
 
   const handleDownloadQuote = () => {

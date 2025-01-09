@@ -137,7 +137,11 @@ export const CreateQuotePage = {
   path: '/quote-page',
   restricted: true,
 }
-
+export const CreateQuoteDetails = {
+  component: QuotePage,
+  path: '/quotedetails',
+  restricted: true,
+}
 export const AccountSettingsRoute = {
   component: Accountsetting,
   path: '/account-settings',
@@ -316,6 +320,7 @@ const IRouteS = {
       CreateHeraldProduct,
       CreateHeraldForm,
       CreateQuotePage,
+      CreateQuoteDetails,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,
@@ -355,6 +360,7 @@ const IRouteS = {
       CreateHeraldProduct,
       CreateHeraldForm,
       CreateQuotePage,
+      CreateQuoteDetails,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,

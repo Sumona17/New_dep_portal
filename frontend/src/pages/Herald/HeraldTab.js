@@ -20,7 +20,7 @@ const DynamicForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
   const [riskValuesData, setRiskValuesData] = useState({});
-  const [coverageValuesData, setCoverageValuesData] = useState({});
+  const [coverageValuesData, ] = useState({});
 //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
   const [prefillDataCache, setPrefillDataCache] = useState({});
 const navigate = useNavigate();
@@ -572,7 +572,7 @@ const {theme} = useMetaData();
           <Form.Item style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Space>
               <Button type="primary" onClick={handleNext}>
-                Next
+                Update Coverage Values
               </Button>
               <Button type="default" onClick={handlePrefill}>
                 Prefill

@@ -47,7 +47,9 @@ export const HeraldProductWrapper = styled.div`
     font-family: "Inter", sans-serif;
     margin-bottom: 24px;
   }
-
+.jtqgXD .ant-checkbox-group label {
+    width: 20%;
+}
   .ant-form-item {
     margin-bottom: 16px;
   }
