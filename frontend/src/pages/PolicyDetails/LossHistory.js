@@ -5,8 +5,10 @@ import { StyledLink, StyledTypographyAdditionalInfo } from "styles/pages/Bind";
 import { losscolumns } from 'pages/Bind/bindDummyData'
 import { PolicyDashboardDescription } from "styles/pages/PolicyDetails";
 import { Card, Form } from "antd";
+import useMetaData from "context/metaData";
 
 const LossHistory = ({data=[], driverData=[], isEditable}) => {
+  const {theme}=useMetaData();
     const [modalOpen, setIsModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
@@ -35,7 +37,7 @@ console.log("data",data)
     setIsModalOpen((prev) => !prev);
   };
   return (
-    <PolicyDashboardDescription>
+    <PolicyDashboardDescription theme={theme}>
       <Card className="ant-card-description">
         <h3>Loss History</h3>
         <Form

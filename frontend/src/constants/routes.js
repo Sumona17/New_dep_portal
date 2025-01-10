@@ -263,7 +263,8 @@ const IRouteS = {
       PrivacyPolicyRoute,
       ContactUsRoute,
       TermsOfUseRoute,
-      AgentregistrationRoute
+      AgentregistrationRoute,
+      ExpiringreportsRoute
     ],
     "customer_login": [
       DashboardRoute,

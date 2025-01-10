@@ -6,11 +6,13 @@ import {policySummaryInitialValues} from './dummyData';
 import {
     PolicyDashboardDescription,
 } from "styles/pages/PolicyDetails";
+import useMetaData from "context/metaData";
 
 const PolicySummary = ({ isEditable }) => {
+    const {theme}=useMetaData();
 
     return (
-        <PolicyDashboardDescription >
+        <PolicyDashboardDescription theme={theme} >
             <Card className="ant-card-description">
                 <Form
                     name="policysummary"

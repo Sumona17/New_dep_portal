@@ -2,15 +2,17 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "styles/pages/Login";
 import TableComponent from "components/Table";
-import { columns,dataSource } from "pages/Dashboard/DashboardSubFeatures/dummyData";
+import { columns,dataSource } from "pages/Dashboard/DashboardSubFeatures/newDummyData";
 import {
   SearchPolicyTitle,
   SearchPolicySection,
   FormSection,
 } from "styles/pages/SearchPolicy";
+import useMetaData from "context/metaData";
 
 
-const ExpiringPolicies = ({theme}) => {
+const ExpiringPolicies = () => {
+  const {theme}=useMetaData();
   const navigate = useNavigate();
   const editQuote = (route, data, pageType) => {
     const newRoute = pageType === "expiringPolicies" ? "/start-transaction" : route;

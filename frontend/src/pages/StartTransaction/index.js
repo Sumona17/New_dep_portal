@@ -20,10 +20,12 @@ import PolicyInfo from "components/PolicyInfo";
 import startTransactionDropDown from "assets/files/startTransaction.csv";
 import Papa from "papaparse";
 import { setDropdownVals } from "utils/helper";
+import useMetaData from "context/metaData";
 
 const filesData = {};
 
 const StartTransaction = () => {
+  const {theme}=useMetaData();
   const [startTransactionDropDownVal, setStartTransactionDropDownVal] =
     useState("");
   const [buttonClicked, setButtonClicked] = useState("");
@@ -73,14 +75,14 @@ const StartTransaction = () => {
     setStartTransactionDropDownVal(value);
   };
   return (
-    <Section>
-      <Container>
-        <PolicyInfo />
+    <Section theme={theme}>
+      <Container theme={theme}>
+        <PolicyInfo/>
         <Row>
           <Col span={24}>
             <Row>
               <Col span={8}>
-                <TitleTransactionStartStyle>
+                <TitleTransactionStartStyle theme={theme}>
                   <Typography.Title level={5}>
                     Transaction Selection
                   </Typography.Title>
@@ -182,6 +184,7 @@ const StartTransaction = () => {
         <Row>
           <Col span={24}>
             <TableComponent
+              theme={theme}
               title={"Transaction History"}
               columns={columns}
               data={dataSourceTransactionHistory}

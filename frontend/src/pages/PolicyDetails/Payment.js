@@ -6,11 +6,13 @@ import FormRadio from 'components/FormControl/FormRadio';
 import {paymentInitialValues} from './dummyData';
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails';
 import {PaymentOptionsVal} from 'components/FormControl/radioOption';
+import useMetaData from 'context/metaData';
 
 const Payment = ({ isEditable }) => {
+    const {theme}=useMetaData();
 
     return (
-        <PolicyDashboardDescription>
+        <PolicyDashboardDescription theme={theme}>
           <Card className="ant-card-description">
             <h3>Payment</h3>
         <Form

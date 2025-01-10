@@ -2,10 +2,13 @@ import React from 'react'
 import { Card, Form, Row, Col } from 'antd';
 import FormControl from 'components/FormControl/FormInput';
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails'
+import useMetaData from 'context/metaData';
+
 
 const Quetionaire = ({isEditable}) => {
+    const {theme}=useMetaData();
   return (
-    <PolicyDashboardDescription>
+    <PolicyDashboardDescription theme={theme}>
         <Card className="ant-card-description">
             <h3>Questionnaire</h3>
             <Form

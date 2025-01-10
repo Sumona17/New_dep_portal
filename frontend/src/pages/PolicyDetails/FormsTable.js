@@ -2,10 +2,13 @@ import React from "react";
 import { Card, Row, Col, Table, ConfigProvider } from "antd";
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails';
 import {dataSource,columns} from './formsDummyData'
+import useMetaData from "context/metaData";
 
 const FormsTable = () => {
+	const {theme}=useMetaData();
+  
   return (
-    <PolicyDashboardDescription>
+    <PolicyDashboardDescription theme={theme}>
       <Card className="ant-card-description forms-tab">
         <h3>Forms</h3>
         <Row>

@@ -6,8 +6,10 @@ import fileUploadIcon from "assets/svg/file-upload-icon.svg";
 import { PolicyDashboardCard } from "styles/pages/PolicyDetails";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import useMetaData from 'context/metaData';
 
 const MenuCard = ({ policyNumber }) => {
+  const {theme}=useMetaData();
   const navigate = useNavigate();
   const handleClaim = () =>{
     navigate('/claim', {state:policyNumber})
@@ -17,7 +19,7 @@ const MenuCard = ({ policyNumber }) => {
   }
     
   return (
-    <PolicyDashboardCard>
+    <PolicyDashboardCard theme={theme}>
       <div className="card-block">
         <div className="card-icon">
           <img src={startTransectionIcon} alt="Start Transaction" />
