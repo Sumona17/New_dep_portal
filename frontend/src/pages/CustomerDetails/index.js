@@ -7,6 +7,7 @@ import { columns, dataSource } from "./dummyData";
 import editIcon from "assets/svg/edit-white.svg";
 import filterIcon from "assets/svg/filter.svg";
 import FormControl from "components/FormControl/FormInput";
+import useMetaData from "context/metaData";
 
 import {
   SearchPolicySection,
@@ -16,6 +17,7 @@ import {
 import DetailsModal from "./detailsModal";
 
 const CustomerDetails = () => {
+  const {theme}=useMetaData();
   const [open, setOpen] = useState(false);
   const [selectedInsured, setSelectedInsured] = useState(null);
 
@@ -24,18 +26,18 @@ const CustomerDetails = () => {
     setOpen(true);
   };
   return (
-    <SearchPolicySection>
+    <SearchPolicySection theme={theme}>
       <Container>
         <div className="topsection">
           <div>
-            <SearchPolicyTitle>Customer Details</SearchPolicyTitle>
+            <SearchPolicyTitle theme={theme}>Customer Details</SearchPolicyTitle>
             <p className="subtext">
             Update contact, address or vehicle details here. Keeping things current
 helps us serve customers better!
                         </p>
           </div>
         </div>
-        <FormSection className="ant-card-body">
+        <FormSection theme={theme} className="ant-card-body">
           <Card>
             <Form layout="vertical">
               <Row gutter={16}>
@@ -72,8 +74,8 @@ helps us serve customers better!
             </Form>
           </Card>
         </FormSection>
-        <FormSection>
-          <TableComponent
+        <FormSection theme={theme}>
+          <TableComponent 
             title={
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>List of Insureds</span>

@@ -10,16 +10,19 @@ import { Section } from 'styles/pages/Login';
 import { Container } from "styles/components/Layout";
 import { BillingCard, TableContainer } from 'styles/pages/Billing';
 import BillingTableConfig from "./dummyData";
+import useMetaData from 'context/metaData';
 
-const Billing = ({theme}) => {
+const Billing = () => {
+    const {theme}=useMetaData();
     const [isEditable] = useState(false);
+
 
     const {dataSource,cdataSource,initialValues,columns,ccolumns} = BillingTableConfig(isEditable)
 
     return (
         <div>
-            <Section>
-                <Container>
+            <Section theme={theme}>
+                <Container theme={theme}>
                     <BillingCard theme={theme}>
                         <h5 className='card-title'>Billing Information</h5>
                         <PolicyInfo  theme={theme}/>

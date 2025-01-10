@@ -8,7 +8,8 @@ import { setDropdownVals } from "utils/helper";
 
 const ESignatureStatusSummaryReport = () => {
 
-  const redirectUrl = () => {
+  const redirectUrl = (e) => {
+    e.preventDefault();
     window.open('/expire-reports', '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
   }
 
@@ -61,6 +62,7 @@ const ESignatureStatusSummaryReport = () => {
             >
               Generate
             </Button>
+
           </div>
         </Col>
       </Row>

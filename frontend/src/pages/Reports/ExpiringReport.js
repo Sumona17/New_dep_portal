@@ -49,7 +49,7 @@ const Expiringreport = () => {
                     </div>
                     <Row gutter={16}>
                         <Col span={10}>
-                            <div className='Heading-label'>Expiring Report</div>
+                            <div className='Heading-label'>E-Signature Report</div>
                             <div className="subtext mt5">This information will help the agent better understand your needs and objectives.</div>
                         </Col>
                         <Col span={14}>
@@ -111,7 +111,7 @@ const Expiringreport = () => {
                             </Row>
                         </Col>
                     </Row>
-                    <TableContainer>
+                    <TableContainer theme={theme}>
                         <Table
                             columns={columns}
                             dataSource={dataSource}

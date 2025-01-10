@@ -5,8 +5,10 @@ import TableComponent from "components/Table";
 import { StyledLink, StyledTypographyAdditionalInfo } from "styles/pages/Bind";
 import {columns} from 'pages/Bind/bindDummyData'
 import { PolicyDashboardDescription } from "styles/pages/PolicyDetails";
+import useMetaData from "context/metaData";
 
 const AdditionalInfo = ({ data = [], vehicleData=[], isEditable }) => {
+  const {theme}=useMetaData();
     const [modalOpen, setIsModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
  
@@ -34,7 +36,7 @@ const AdditionalInfo = ({ data = [], vehicleData=[], isEditable }) => {
     setIsModalOpen((prev) => !prev);
   };
   return (
-    <PolicyDashboardDescription>
+    <PolicyDashboardDescription theme={theme}>
       <Card className="ant-card-description">
         <h3>Additional Information</h3>
         <Form

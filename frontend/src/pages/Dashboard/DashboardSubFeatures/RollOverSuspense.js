@@ -2,15 +2,17 @@ import React from "react";
 import { Container } from "styles/pages/Login";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "components/Table";
-import { columns,dataSource } from "pages/Dashboard/DashboardSubFeatures/dummyData";
+import { columns,dataSource } from "pages/Dashboard/DashboardSubFeatures/newDummyData";
 
 import {
   SearchPolicyTitle,
   SearchPolicySection,
   FormSection,
 } from "styles/pages/SearchPolicy";
+import useMetaData from "context/metaData";
 
-const RollOverSuspense = ({theme}) => {
+const RollOverSuspense = () => {
+  const {theme}=useMetaData();
   const navigate = useNavigate();
   const editQuote = (route, data, pageType) => {
     const newRoute = pageType === "rolloverSuspense" ? "/start-transaction" : route;
@@ -20,8 +22,8 @@ const RollOverSuspense = ({theme}) => {
   };
 
   return (
-    <SearchPolicySection>
-      <Container>
+    <SearchPolicySection theme={theme}>
+      <Container theme={theme}>
         <div className="topsection">
           <div>
             <SearchPolicyTitle theme={theme}>
@@ -29,7 +31,7 @@ const RollOverSuspense = ({theme}) => {
             </SearchPolicyTitle>
           </div>
         </div>
-        <FormSection>
+        <FormSection theme={theme}>
            <TableComponent theme={theme} title="Results" columns={columns(editQuote,"rolloverSuspense")} data={dataSource} />
         </FormSection>
       </Container>

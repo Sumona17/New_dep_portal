@@ -23,9 +23,12 @@ import {
 } from "styles/pages/PolicyDetails";
 import AdditionalInfo from './AdditionalInfo';
 import LossHistory from './LossHistory';
+import useMetaData from "context/metaData";
+
 
 
 const PolicyTabsConfig = (tabToggles,isEditable) => {
+    const {theme}=useMetaData();
     const defaultTabImages = {
         "1": policySummaryIcon,
         "2": propertyIcon,
@@ -54,7 +57,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "1",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -74,7 +77,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "2",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -94,7 +97,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "3",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -114,7 +117,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "4",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -134,7 +137,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "5",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -154,7 +157,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "6",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -174,7 +177,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "7",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -194,7 +197,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "8",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
@@ -214,7 +217,7 @@ const PolicyTabsConfig = (tabToggles,isEditable) => {
         {
             key: "9",
             label: (
-                <PolicyDashboardFeatureCard>
+                <PolicyDashboardFeatureCard theme={theme}>
                     <div className="ant-card-body">
                         <div className="card-icon">
                             <img
