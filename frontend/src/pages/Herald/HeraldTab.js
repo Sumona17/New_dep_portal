@@ -3,30 +3,39 @@ import { Form, Input, InputNumber, Select, DatePicker, Button, message, Spin, Ta
 import axios from "axios";
 import moment from "moment";
 import { FormInputFeild } from "styles/components/FormControl";
-import { useNavigate } from 'react-router-dom';
-import useMetaData from "context/metaData";
+// import { useNavigate } from 'react-router-dom';
+// // import useMetaData from "context/metaData";
 import { useLocation } from "react-router-dom";
 
 const { TabPane } = Tabs;
 const { Option } = Select;
 
-const DynamicForm = () => {
+const DynamicForm = ( {state,
+
+ 
+  theme,
+  onUpdateFormData,
+  isReviewStep,
+
+
+  onNext
+}) => {
   const [form] = Form.useForm();
-  const [applicationData, setApplicationData] = useState(null);
+  const [ applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState("risk_values");
   const [industryOptions, setIndustryOptions] = useState([]);
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: null });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
-  const [riskValuesData, setRiskValuesData] = useState({});
-  const [coverageValuesData, ] = useState({});
+  // const [riskValuesData, ] = useState({});
+  // const [coverageValuesData, ] = useState({});
 //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
-  const [prefillDataCache, setPrefillDataCache] = useState({});
-const navigate = useNavigate();
+  const [, setPrefillDataCache] = useState({});
+// const navigate = useNavigate();
 const location = useLocation();
 const selectedProducts = location.state?.selectedProducts || [];
-const {theme} = useMetaData();
+
   useEffect(() => {
     const fetchApplicationData = async () => {
       try {
@@ -88,18 +97,19 @@ const {theme} = useMetaData();
   };
   const handleNext = async () => {
     try {
-      // Validate and save Risk Values data
-      const riskValues = await form.validateFields();
-      setRiskValuesData(riskValues);
-
-      // Switch to Coverage Values tab
-      setCurrentTab("coverage_values");
-      form.resetFields();
+        const values = await form.validateFields();
+        onUpdateFormData(currentTab, values);
+        
+        if (currentTab === "risk_values") {
+            setCurrentTab("coverage_values");
+        } else if (currentTab === "coverage_values") {
+            onNext(); // Move to next step in parent component
+        }
     } catch (errorInfo) {
-      console.log('Form validation failed:', errorInfo);
-      message.error('Please fill in all required fields correctly.');
+        console.log('Form validation failed:', errorInfo);
+        message.error('Please fill in all required fields correctly.');
     }
-  };
+};
   const handleSubmit = async () => {
     try {
       // Validate and save Coverage Values data
@@ -193,11 +203,7 @@ const {theme} = useMetaData();
           { risk_parameter_id: "rsk_ggy8_cyb_warranty", value: riskValues["rsk_ggy8_cyb_warranty"] || "yes" },
           { risk_parameter_id: "rsk_w6ug_herald_attestation", value: riskValues["rsk_w6ug_herald_attestation"] || "agree" }
         ],
-        products: [
-          "prd_0050_herald_cyber",
-          "prd_la3v_atbay_cyber",
-          "prd_jk0g_cowbell_cyber"
-        ]
+        products: state?.selectedProducts || []
       };
 
       console.log("Updating application with payload:", JSON.stringify(updatePayload, null, 2));
@@ -318,14 +324,14 @@ const {theme} = useMetaData();
   };
 
 
-  const handleGetQuote = () => {
-    navigate('/quote-page', {
-      state: {
-        formData: { ...riskValuesData, ...coverageValuesData },
-        applicationData
-      }
-    });
-  }
+//   const handleGetQuote = () => {
+//     navigate('/quote-page', {
+//         state: {
+//             formData: { ...riskValuesData, ...formData?.coverageValues },
+//             applicationData
+//         }
+//     });
+// }
 
   // Updated handlePrefill function
  const handlePrefill = async () => {
@@ -464,38 +470,41 @@ const {theme} = useMetaData();
 
 
 
-  const renderModalContent = () => {
-    const isSuccess = submitStatus.type === 'success';
-
-    return (
+const renderModalContent = () => {
+  const isSuccess = submitStatus.type === 'success';
+  
+  return (
       <div style={{ textAlign: 'center' }}>
-        <div style={{
-          fontSize: '24px',
-          marginBottom: '16px',
-          color: isSuccess ? '#52c41a' : '#ff4d4f'
-        }}>
-          {isSuccess ? '✓' : '✕'}
-        </div>
-        <p style={{
-          fontSize: '16px',
-          marginBottom: '24px',
-          color: isSuccess ? '#52c41a' : '#ff4d4f'
-        }}>
-          {submitStatus.message}
-        </p>
-        <Space>
-          <Button onClick={() => setIsModalVisible(false)}>
-            Close
-          </Button>
-          {isSuccess && (
-            <Button type="primary" onClick={handleGetQuote} >
-              Get Quote
-            </Button>
-          )}
-        </Space>
+          <div style={{
+              fontSize: '24px',
+              marginBottom: '16px',
+              color: isSuccess ? '#52c41a' : '#ff4d4f'
+          }}>
+              {isSuccess ? '✓' : '✕'}
+          </div>
+          <p style={{
+              fontSize: '16px',
+              marginBottom: '24px',
+              color: isSuccess ? '#52c41a' : '#ff4d4f'
+          }}>
+              {submitStatus.message}
+          </p>
+          <Space>
+              <Button onClick={() => setIsModalVisible(false)}>
+                  Close
+              </Button>
+              {isSuccess && (
+                  <Button type="primary" onClick={() => {
+                      setIsModalVisible(false);
+                      onNext();
+                  }}>
+                      Get Quote
+                  </Button>
+              )}
+          </Space>
       </div>
-    );
-  };
+  );
+};
   const renderConfirmationModal = () => {
     return (
       <Modal
@@ -571,9 +580,9 @@ const {theme} = useMetaData();
         {currentTab === "risk_values" ? (
           <Form.Item style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Space>
-              <Button type="primary" onClick={handleNext}>
+              {/* <Button type="primary" onClick={handleNext}>
                 Update Coverage Values
-              </Button>
+              </Button> */}
               <Button type="default" onClick={handlePrefill}>
                 Prefill
               </Button>
@@ -581,9 +590,9 @@ const {theme} = useMetaData();
           </Form.Item>
         ) : (
           <Form.Item>
-            <Button type="primary" onClick={handleSubmit}>
+            {/* <Button type="primary" onClick={handleSubmit}>
               Submit
-            </Button>
+            </Button> */}
           </Form.Item>
         )}
 
@@ -877,60 +886,70 @@ const {theme} = useMetaData();
     return <p style={{ textAlign: "center", marginTop: "20%" }}>No application data available.</p>;
   }
 
-  const handleTabChange = (key) => {
-    setCurrentTab(key);
+  // const handleTabChange = (key) => {
+  //   setCurrentTab(key);
     
-    // If we have prefilled data, set the appropriate fields for the new tab
-    if (Object.keys(prefillDataCache).length > 0) {
-      const relevantFields = applicationData[key].map(
-        field => field.risk_parameter_id || field.coverage_parameter_id
-      );
+  //   // If we have prefilled data, set the appropriate fields for the new tab
+  //   if (Object.keys(prefillDataCache).length > 0) {
+  //     const relevantFields = applicationData[key].map(
+  //       field => field.risk_parameter_id || field.coverage_parameter_id
+  //     );
       
-      const tabData = Object.keys(prefillDataCache)
-        .filter(key => relevantFields.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = prefillDataCache[key];
-          return obj;
-        }, {});
+  //     const tabData = Object.keys(prefillDataCache)
+  //       .filter(key => relevantFields.includes(key))
+  //       .reduce((obj, key) => {
+  //         obj[key] = prefillDataCache[key];
+  //         return obj;
+  //       }, {});
       
-      form.setFieldsValue(tabData);
-    } else {
-      form.resetFields();
-    }
-  };
+  //     form.setFieldsValue(tabData);
+  //   } else {
+  //     form.resetFields();
+  //   }
+  // };
 
   return (
     <>
-      <Tabs
-        activeKey={currentTab}
-        onChange={handleTabChange}
-      >
-        <TabPane tab="Risk Values" key="risk_values">
-          {renderFormFields(applicationData.risk_values)}
-        </TabPane>
-        <TabPane tab="Coverage Values" key="coverage_values">
-          {renderFormFields(applicationData.coverage_values)}
-        </TabPane>
-        <TabPane tab="Products" key="products">
-          {applicationData.products.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </TabPane>
-      </Tabs>
+        <Tabs
+            activeKey={currentTab}
+            onChange={setCurrentTab}
+        >
+            <TabPane tab="Risk Values" key="risk_values">
+                {renderFormFields(applicationData.risk_values)}
+            </TabPane>
+            <TabPane tab="Coverage Values" key="coverage_values">
+                {renderFormFields(applicationData.coverage_values)}
+            </TabPane>
+        </Tabs>
 
-      <Modal
-        title={submitStatus.type === 'success' ? "Success!" : "Error"}
-        open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={null}
-        centered
-      >
-        {renderModalContent()}
-      </Modal>
+        {!isReviewStep && (
+            <div style={{ marginTop: 16, textAlign: 'right' }}>
+                <Button type="primary" onClick={handleNext}>
+                    {currentTab === "risk_values" ? "Update: Coverage Values" : "Review"}
+                </Button>
+            </div>
+        )}
 
-      {renderConfirmationModal()}
+        {isReviewStep && (
+            <div style={{ marginTop: 16, textAlign: 'right' }}>
+                <Button type="primary" onClick={handleSubmit}>
+                    Submit Application
+                </Button>
+            </div>
+        )}
+
+        <Modal
+            title={submitStatus.type === 'success' ? "Success!" : "Error"}
+            open={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            footer={null}
+            centered
+        >
+            {renderModalContent()}
+        </Modal>
+
+        {renderConfirmationModal()}
     </>
-  );
+);
 };
-
 export default DynamicForm;
