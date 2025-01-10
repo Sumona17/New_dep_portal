@@ -38,6 +38,7 @@ import Producerlossratio from 'pages/Dashboard/DashboardSubFeatures/Producerloss
 import HeraldProduct from 'pages/Herald/HeraldProduct';
 import HeraldForm from 'pages/Herald/HeraldForm';
 import QuotePage from 'pages/Herald/QuotePage';
+import UploadFile from 'pages/Herald/UploadFile';
 
 export const LoginRoute = {
     component: Login,
@@ -118,6 +119,12 @@ export const HomeOwnersQuote = {
 export const CreateFloodQuote = {
   component: Flood,
   path: '/flood',
+  restricted: true,
+}
+
+export const UploadFileOption = {
+  component: UploadFile,
+  path: '/upload-file',
   restricted: true,
 }
 
@@ -317,6 +324,7 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       CreateFloodQuote,
+      UploadFileOption,
       CreateHeraldProduct,
       CreateHeraldForm,
       CreateQuotePage,
@@ -357,6 +365,7 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       CreateFloodQuote,
+      UploadFileOption,
       CreateHeraldProduct,
       CreateHeraldForm,
       CreateQuotePage,

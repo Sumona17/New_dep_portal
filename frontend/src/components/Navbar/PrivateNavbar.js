@@ -241,7 +241,7 @@ export default function PrivateNavbar() {
     } else if (e.key == 'homeowners') {
       navigate('/home-owners')
     } else if (e.key == 'cyber') {
-      navigate('/herald-product')
+      navigate('/upload-file')
     } else if (e.key == 'automaticquote') {
       navigate('/automatic-quote');
     }
