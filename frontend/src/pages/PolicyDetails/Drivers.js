@@ -2,8 +2,10 @@ import React from 'react'
 import { Card, Form, Row, Col } from 'antd';
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails';
 import FormControl from "components/FormControl/FormInput";
+import useMetaData from "context/metaData";
 
 const Drivers = ({ isEditable }) => {
+	const {theme}=useMetaData();
 
     const drivers = [
         {
@@ -19,7 +21,7 @@ const Drivers = ({ isEditable }) => {
     ]
 
     return (
-        <PolicyDashboardDescription>
+        <PolicyDashboardDescription theme={theme}>
             <Card className="ant-card-description">
                 <h3>Drivers</h3>
                 <Form

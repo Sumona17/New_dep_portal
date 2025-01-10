@@ -2,11 +2,14 @@ import React from 'react';
 import { Card, Form, Row, Col } from 'antd';
 import DropdownSelect from 'components/FormControl/DropdownSelect';
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails';
+import useMetaData from "context/metaData";
 
 const Coverages = ({ isEditable }) => {
 
+  const {theme}=useMetaData();
+
   return (
-    <PolicyDashboardDescription>
+    <PolicyDashboardDescription theme={theme}>
       <Card className="ant-card-description">
         <h3>Coverages</h3>
         <Form

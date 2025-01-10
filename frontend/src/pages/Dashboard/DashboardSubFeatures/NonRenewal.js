@@ -5,15 +5,17 @@ import TableComponent from "components/Table";
 import {
   columns,
   dataSource,
-} from "pages/Dashboard/DashboardSubFeatures/dummyData";
+} from "pages/Dashboard/DashboardSubFeatures/newDummyData";
 
 import {
   SearchPolicyTitle,
   SearchPolicySection,
   FormSection,
 } from "styles/pages/SearchPolicy";
+import useMetaData from "context/metaData";
 
-const NonRenewals = ({ theme }) => {
+const NonRenewals = () => {
+  const {theme}= useMetaData();
   const navigate = useNavigate();
   const editQuote = (route, data, pageType) => {
     const newRoute = pageType === "nonRenewals" ? "/start-transaction" : route;
@@ -23,8 +25,8 @@ const NonRenewals = ({ theme }) => {
   };
 
   return (
-    <SearchPolicySection>
-      <Container>
+    <SearchPolicySection theme={theme}>
+      <Container theme={theme}>
         <div className="topsection">
           <div>
             <SearchPolicyTitle theme={theme}>
@@ -33,7 +35,7 @@ const NonRenewals = ({ theme }) => {
             </SearchPolicyTitle>
           </div>
         </div>
-        <FormSection>
+        <FormSection theme={theme}>
           <TableComponent
             theme={theme}
             title="Results"

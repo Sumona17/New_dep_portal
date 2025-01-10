@@ -3,11 +3,13 @@ import { Card, Form, Row, Col } from 'antd';
 import FormControl from 'components/FormControl/FormInput';
 import { PolicyDashboardDescription } from 'styles/pages/PolicyDetails';
 import { initialValues } from './dummyData';
+import useMetaData from "context/metaData";
 
 const Coverage = ({ isEditable }) => {
+    const {theme}=useMetaData();
 
     return (
-        <PolicyDashboardDescription>
+        <PolicyDashboardDescription theme={theme}>
             <Card className="ant-card-description">
                 <h3>Coverage</h3>
                 <Form
