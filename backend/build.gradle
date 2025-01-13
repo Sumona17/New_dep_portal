@@ -45,7 +45,8 @@ dependencies {
 	implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
 	// https://mvnrepository.com/artifact/software.amazon.awssdk/textract
 	implementation group: 'software.amazon.awssdk', name: 'textract', version: '2.29.26'
-
+	implementation group: 'org.apache.poi', name: 'poi', version: '5.3.0'
+	implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.3.0'
 }
 
 tasks.named('test') {

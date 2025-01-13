@@ -3,10 +3,15 @@ import { determineInstance } from 'utils/helper'
 
 const get = async ({ url, type, token = false, file = false }) => {
   const instance = determineInstance(type)
-  let headers = {}
+  const username = process.env.REACT_APP_Security_ID;
+  const password = process.env.REACT_APP_Security_Password;
+  const credentials = btoa(`${username}:${password}`);
+  let headers = {"Content-Type": "text/plain",
+    Authorization: `Basic ${credentials}`,
+    Cookie: "pin_writes=y",}
   if (token) {
     const accessToken = localStorage.getItem('token')
-    headers = { 'JCMS-API-TOKEN': accessToken, "Content-Type": "image/jpeg" }
+    headers = { 'JCMS-API-TOKEN': accessToken, ...headers }
   }
   if (file) {
     headers = { ...headers, "Content-Type": "image/jpeg" };

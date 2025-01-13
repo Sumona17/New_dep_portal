@@ -35,6 +35,7 @@ import Allpayment from 'pages/Dashboard/DashboardSubFeatures/Allpayment';
 import ProducerProduction from 'pages/Dashboard/DashboardSubFeatures/ProducerProduction';
 import Premiumtrust from 'pages/Dashboard/DashboardSubFeatures/Premiumtrust';
 import Producerlossratio from 'pages/Dashboard/DashboardSubFeatures/Producerlossratio';
+import BulkQuote from 'pages/BulkQuote/BulkQuote';
 
 export const LoginRoute = {
     component: Login,
@@ -257,6 +258,12 @@ export const ProducerlossratioRoute = {
   restricted: false,
 }
 
+export const BulkQuoteRoute = {
+  component: BulkQuote,
+  path: '/bulk-quote',
+  restricted: false,
+}
+
 const IRouteS = {
     "UN_AUTH_ROUTES": [
       LoginRoute,
@@ -299,7 +306,8 @@ const IRouteS = {
       AlltransactionpaymentRoute,
       ProducerProductionRoute,
       PremiumtrustRoute,
-      ProducerlossratioRoute
+      ProducerlossratioRoute,
+      BulkQuoteRoute
     ],
     "agent_login": [
       DashboardRoute,
@@ -335,7 +343,8 @@ const IRouteS = {
       AlltransactionpaymentRoute,
       ProducerProductionRoute,
       PremiumtrustRoute,
-      ProducerlossratioRoute
+      ProducerlossratioRoute,
+      BulkQuoteRoute
     ]
   }
   
