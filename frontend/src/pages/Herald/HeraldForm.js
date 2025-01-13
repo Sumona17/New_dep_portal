@@ -9,7 +9,7 @@ import QuotePage from './QuotePage';
 const HeraldForm = () => {
     const { theme } = useMetaData();
     const { state } = useLocation();
-    const steps = ['Application Details', 'Review and Submit', 'Quote'];
+    const steps = ['Application Details', 'Review and Submit', 'View Quote Details'];
     const [activeStep, setActiveStep] = useState(0);
     const [open, setOpen] = useState(false);
     const [nextVal, setNextVal] = useState(false);
@@ -73,7 +73,7 @@ const HeraldForm = () => {
                         onNext={handleNextStep}
                     />
                 );
-            case 'Quote':
+            case 'View Quote Details':
                 return (
                     <QuotePage 
                         state={{

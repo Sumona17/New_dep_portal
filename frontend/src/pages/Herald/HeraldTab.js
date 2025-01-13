@@ -540,64 +540,62 @@ const renderModalContent = () => {
     }, {});
 
     return (
-      <Form
-        form={form}
-        layout="vertical"
-        onFinishFailed={(errorInfo) => {
-          console.log('Form validation failed:', errorInfo);
-          setSubmitStatus({
-            type: 'error',
-            message: 'Please fill in all required fields correctly.'
-          });
-          setIsModalVisible(true);
-        }}
-      >
-        <Row gutter={16}>
-          {["Basic Information", "Risk Information"].map((sectionName) => (
-            <Col span={12} key={sectionName}>
-              <div style={{ marginBottom: 24 }}>
-                {/* Render the fields without the heading */}
-                {groupedSections[sectionName]?.map((field) => renderField(field))}
-                {/* Only show MapView in Risk Information section AND when currentTab is risk_values */}
-                {sectionName === "Risk Information" && currentTab === "risk_values" && (
-                  <div style={{ marginTop: 16 }}>
-                  
-                  </div>
-                )}
-              </div>
-            </Col>
-          ))}
-        </Row>
-        {Object.entries(groupedSections)
-          .filter(([sectionName]) => !["Basic Information", "Risk Information"].includes(sectionName))
-          .map(([sectionName, fields]) => (
-            <div key={sectionName} style={{ marginBottom: 24 }}>
-              <h3 style={{ borderBottom: "1px solid #ddd", paddingBottom: 8 }}>{sectionName}</h3>
-              {fields.map((field) => renderField(field))}
-            </div>
-          ))}
-
-        {currentTab === "risk_values" ? (
-          <Form.Item style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <Space>
-              {/* <Button type="primary" onClick={handleNext}>
-                Update Coverage Values
-              </Button> */}
-              <Button type="default" onClick={handlePrefill}>
-                Prefill
-              </Button>
-            </Space>
-          </Form.Item>
-        ) : (
-          <Form.Item>
-            {/* <Button type="primary" onClick={handleSubmit}>
-              Submit
-            </Button> */}
-          </Form.Item>
+      <div>
+        {/* Prefill button positioned above and to the right */}
+        {currentTab === "risk_values" && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+            <Button type="default" onClick={handlePrefill}>
+              Prefill
+            </Button>
+          </div>
         )}
-
-      </Form>
+    
+        <Form
+          form={form}
+          layout="vertical"
+          onFinishFailed={(errorInfo) => {
+            console.log('Form validation failed:', errorInfo);
+            setSubmitStatus({
+              type: 'error',
+              message: 'Please fill in all required fields correctly.',
+            });
+            setIsModalVisible(true);
+          }}
+        >
+          <Row gutter={16}>
+            {["Basic Information", "Risk Information"].map((sectionName) => (
+              <Col span={12} key={sectionName}>
+                <div style={{ marginBottom: 24 }}>
+                  {/* Render the fields without the heading */}
+                  {groupedSections[sectionName]?.map((field) => renderField(field))}
+                  {/* Only show MapView in Risk Information section AND when currentTab is risk_values */}
+                  {sectionName === "Risk Information" && currentTab === "risk_values" && (
+                    <div style={{ marginTop: 16 }}>
+                      {/* Add additional content here if needed */}
+                    </div>
+                  )}
+                </div>
+              </Col>
+            ))}
+          </Row>
+          {Object.entries(groupedSections)
+            .filter(([sectionName]) => !["Basic Information", "Risk Information"].includes(sectionName))
+            .map(([sectionName, fields]) => (
+              <div key={sectionName} style={{ marginBottom: 24 }}>
+                <h3 style={{ borderBottom: "1px solid #ddd", paddingBottom: 8 }}>{sectionName}</h3>
+                {fields.map((field) => renderField(field))}
+              </div>
+            ))}
+    
+          {currentTab !== "risk_values" && (
+            <Form.Item>
+              {/* Optional Submit Button */}
+            </Form.Item>
+          )}
+        </Form>
+      </div>
     );
+    
   };
   const renderField = (field) => {
     const { risk_parameter_id, coverage_parameter_id, parameter_text, input_type, schema, section } = field;

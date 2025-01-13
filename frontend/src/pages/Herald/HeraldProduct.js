@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 const HeraldProduct = ({ onProductSelection }) => {
   const { theme } = useMetaData();
   const cyberRiskOptions = [
-    { label: "At-Bay Cyber", value: "prd_la3v_atbay_cyber" },
-    { label: "Cowbell Cyber", value: "prd_jk0g_cowbell_cyber" },
-    { label: "Herald Cyber", value: "prd_0050_herald_cyber" },
+    { label: <b>At-Bay Cyber</b>, value: "prd_la3v_atbay_cyber" },
+    { label: <b>Cowbell Cyber</b>, value: "prd_jk0g_cowbell_cyber" },
+    { label: <b>Herald Cyber</b>, value: "prd_0050_herald_cyber" },
   ];
   const [selectedProducts, setSelectedProducts] = useState([]);
   const navigate = useNavigate();

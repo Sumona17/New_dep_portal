@@ -1,37 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    Button, 
-    Card, 
-    Descriptions, 
-    Space, 
-    message, 
+import {
+    Button,
+    Card,
+    Descriptions,
+    Space,
+    message,
     Tag,
-    Collapse, 
+    Collapse,
     Spin,
     Modal
 } from 'antd';
-import jsPDF from 'jspdf';
+
 import axios from 'axios';
 import { Container } from 'styles/pages/Login';
-
+import { useLocation } from 'react-router-dom';
+ 
 const { Panel } = Collapse;
-
+ 
 const QuotePage = () => {
     const [quotes, setQuotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedQuote, setSelectedQuote] = useState(null);
     const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
-   
-
+    const location = useLocation();
+    const selectedProducts = location.state?.selectedProducts || [];
+ 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get("https://sandbox.heraldapi.com/quotes", {
                     headers: {
-                        Authorization: "Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=",
-                    },
+                        Authorization: `Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=`,
+                      },
                 });
-                setQuotes(response.data.quotes);
+               
+                // Process quotes for each selected product
+                const processedQuotes = selectedProducts.map(productId => {
+                    // Get all quotes for this product
+                    const productQuotes = response.data.quotes.filter(quote =>
+                        quote.product.id === productId
+                    );
+ 
+                    // Try to find a successful quote first
+                    const successfulQuote = productQuotes.find(quote => quote.status === "active");
+                   
+                    // If no successful quote, get the first quote of any status
+                    return successfulQuote || productQuotes[0];
+                }).filter(Boolean); // Remove null entries
+ 
+                setQuotes(processedQuotes);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 message.error("Failed to fetch quotes.");
@@ -39,10 +56,10 @@ const QuotePage = () => {
                 setLoading(false);
             }
         };
-
+ 
         fetchData();
-    }, []);
-
+    }, [selectedProducts]);
+ 
     const renderStatusTag = (status) => {
         switch (status) {
             case "active":
@@ -52,10 +69,10 @@ const QuotePage = () => {
             case "rejected":
                 return <Tag color="red">Rejected</Tag>;
             default:
-                return null;
+                return <Tag color="default">{status}</Tag>;
         }
     };
-
+ 
     const formatPrice = (price) => {
         if (!price) return 'N/A';
         if (typeof price === 'object') {
@@ -64,52 +81,42 @@ const QuotePage = () => {
         }
         return typeof price === 'number' ? `$${price.toLocaleString()}` : 'N/A';
     };
+ 
+    const handleDownloadQuote = async () => {
+        try {
 
-    const handleDownloadQuote = (quote) => {
-        const doc = new jsPDF();
-        
-        doc.setFontSize(18);
-        doc.text('Quote Details', 10, 20);
-
-        let yPosition = 40;
-        doc.setFontSize(12);
-        
-        doc.text(`Product: ${quote.product.name}`, 10, yPosition);
-        yPosition += 10;
-        doc.text(`Price: ${formatPrice(quote.prices)}`, 10, yPosition);
-        yPosition += 10;
-        doc.text(`Status: ${quote.status}`, 10, yPosition);
-        yPosition += 20;
-
-        if (quote.coverage_values?.length) {
-            doc.text('Coverage Details:', 10, yPosition);
-            yPosition += 10;
-            quote.coverage_values.forEach(coverage => {
-                doc.text(`${coverage.parameter_text.agent_facing_text}: ${coverage.value}`, 10, yPosition);
-                yPosition += 10;
-            });
+            const response = await axios.post(
+                "https://sandbox.heraldapi.com/files/3d7cd53b-f73f-4257-a9ea-8ac955329693/get_temporary_link",
+                null,
+                {
+                  headers: {
+                    Authorization: `Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=`,
+                  },
+                }
+              );
+           
+    
+            const temporaryLink = response.data?.temporary_link;
+            if (temporaryLink) {
+                window.open(temporaryLink, "_blank");
+            } else {
+                message.error("Failed to retrieve the download link.");
+            }
+        } catch (error) {
+            console.error("Error fetching temporary link:", error.response?.data || error.message);
+            message.error("An error occurred while fetching the download link.");
         }
-
-        if (quote.risk_values?.length) {
-            doc.text('Risk Details:', 10, yPosition);
-            yPosition += 10;
-            quote.risk_values.forEach(risk => {
-                doc.text(`${risk.parameter_text.agent_facing_text}: ${risk.value}`, 10, yPosition);
-                yPosition += 10;
-            });
-        }
-
-        doc.save('quote_details.pdf');
     };
-
+    
+ 
     const handleViewFullDetails = (quote) => {
         setSelectedQuote(quote);
         setIsDetailsModalVisible(true);
     };
-
+ 
     const QuoteDetailsModal = ({ quote, visible, onClose }) => {
         if (!quote) return null;
-
+ 
         return (
             <Modal
                 title="Full Quote Details"
@@ -140,13 +147,13 @@ const QuotePage = () => {
                             </Descriptions.Item>
                         )}
                     </Descriptions>
-
+ 
                     <Collapse style={{ marginTop: "20px" }}>
                         <Panel header="Coverage Details" key="1">
                             <Descriptions bordered column={1}>
                                 {quote.coverage_values?.map((coverage, index) => (
-                                    <Descriptions.Item 
-                                        key={index} 
+                                    <Descriptions.Item
+                                        key={index}
                                         label={coverage.parameter_text.agent_facing_text}
                                     >
                                         {coverage.value}
@@ -154,12 +161,12 @@ const QuotePage = () => {
                                 ))}
                             </Descriptions>
                         </Panel>
-                        
+                       
                         <Panel header="Risk Details" key="2">
                             <Descriptions bordered column={1}>
                                 {quote.risk_values?.map((risk, index) => (
-                                    <Descriptions.Item 
-                                        key={index} 
+                                    <Descriptions.Item
+                                        key={index}
                                         label={risk.parameter_text.agent_facing_text}
                                     >
                                         {risk.value}
@@ -172,7 +179,7 @@ const QuotePage = () => {
             </Modal>
         );
     };
-
+ 
     if (loading) {
         return (
             <Container>
@@ -182,7 +189,17 @@ const QuotePage = () => {
             </Container>
         );
     }
-
+ 
+    if (quotes.length === 0) {
+        return (
+            <Container>
+                <Card>
+                    <p>No quotes available for the selected products.</p>
+                </Card>
+            </Container>
+        );
+    }
+ 
     return (
         <Container title="Available Quotes">
             <div>
@@ -203,8 +220,8 @@ const QuotePage = () => {
                         )}
                         <div style={{ marginTop: "10px" }}>
                             <Space>
-                                <Button 
-                                    type="primary" 
+                                <Button
+                                    type="primary"
                                     disabled={quote.status !== "referral"}
                                 >
                                     Bind
@@ -212,9 +229,6 @@ const QuotePage = () => {
                                 <Button onClick={() => handleViewFullDetails(quote)}>
                                     Full Details
                                 </Button>
-                                {/* <Button onClick={() => handleDownloadQuote(quote)}>
-                                    Download Quote
-                                </Button> */}
                             </Space>
                         </div>
                         <Collapse style={{ marginTop: "20px" }}>
@@ -229,8 +243,8 @@ const QuotePage = () => {
                     </Card>
                 ))}
             </div>
-
-            <QuoteDetailsModal 
+ 
+            <QuoteDetailsModal
                 quote={selectedQuote}
                 visible={isDetailsModalVisible}
                 onClose={() => {
@@ -241,5 +255,5 @@ const QuotePage = () => {
         </Container>
     );
 };
-
+ 
 export default QuotePage;

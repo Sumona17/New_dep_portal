@@ -302,7 +302,7 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       AgentregistrationRoute,
-      ExpiringreportsRoute
+      ExpiringreportsRoute,
     ],
     "customer_login": [
       DashboardRoute,
