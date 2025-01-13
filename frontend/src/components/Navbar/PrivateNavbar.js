@@ -174,6 +174,10 @@ export default function PrivateNavbar() {
           label: "Automatic quote",
           key: "automaticquote",
         },
+        {
+          label: "Bulk Quote",
+          key: "bulkquote",
+        },
       ],
     },
     {
@@ -244,6 +248,8 @@ export default function PrivateNavbar() {
       navigate('/upload-file')
     } else if (e.key == 'automaticquote') {
       navigate('/automatic-quote');
+    }else if (e.key == 'bulkquote') {
+      navigate('/bulk-quote');
     }
   };
 
