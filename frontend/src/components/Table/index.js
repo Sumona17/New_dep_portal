@@ -31,6 +31,12 @@ const TableComponent = ({ title, columns, data, isPagination = true, extraConten
           pagination={isPagination ? tableParams.pagination : false}
           onChange={handleTableChange}
           rowKey="key"
+          onRow={(record) => ({
+            style: {
+                backgroundColor: record.highlight ? "#eef6ff" : "transparent", 
+                transition: "background-color 0.3s ease", 
+            },
+        })}
         />
         {extraContentAfter && <div className="extra-content-after">{extraContentAfter}</div>}
       </TableContainer>
