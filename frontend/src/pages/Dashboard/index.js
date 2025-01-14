@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { Container } from "styles/components/Layout";
 import ShareIcon from "assets/svg/share.svg";
-import ViewIcon from "assets/svg/view.svg";
+// import ViewIcon from "assets/svg/view.svg";
 import QuickLionk from "assets/svg/quicklink.svg";
 import QuickLinkDark from "assets/images/quicklink-dark.png";
 import TargetDashboard from "assets/images/taget-dashboard.png";
@@ -73,18 +73,43 @@ const Dashboard = () => {
         <DashboardCard theme={theme}>
           <Container>
             <Row gutter={16} className="mt-negative">
-              <Col className="gutter-row" span={6}>
+              <Col className="gutter-row" span={9}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">15</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Policy Transactions</h5>
-                      <p className="card-desc">
+                      <h5 className="card-title">Insights</h5>
+                      <div className="card-desc">
+                        <Row gutter={16}>
+                          <Col span={9}>Product</Col>
+                          <Col span={9}>Better Conversion</Col>
+                          <Col span={6}>Rated or Referred</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={9}>Cyber</Col>
+                          <Col span={9}>$50K - $1mn</Col>
+                          <Col span={6}>47%</Col>
+                        </Row>
+                        <br/>
+                        <Row gutter={16}>
+                          <Col span={9}>Product</Col>
+                          <Col span={9}>Least Conversion</Col>
+                          <Col span={6}>Rejected or Abandoned</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={9}>Excess Liability</Col>
+                          <Col span={9}>$10mn - $50mn</Col>
+                          <Col span={6}>37%</Col>
+                        </Row>
+                      </div>
+                      {/* <p className="card-desc">
                         View list of policies that need review along with the
                         transaction details
                       </p>
@@ -95,7 +120,7 @@ const Dashboard = () => {
                         <span>
                           <img src={ShareIcon} alt="Share" />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
@@ -103,43 +128,97 @@ const Dashboard = () => {
               <Col className="gutter-row" span={6}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         {" "}
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">18</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Policies In Force</h5>
-                      <p className="card-desc">
+                      <h5 className="card-title">Alerts and Reminders</h5>
+                      {/* <p className="card-desc">
                         View list of Policies that are active as of today
-                      </p>
-                      <div
+                      </p> */}
+                      <div className="card-desc">
+                        <Row gutter={16}>
+                          <Col span={18}>Renewal Due</Col>
+                          <Col span={6}>17</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={18}>Conversion Deadline</Col>
+                          <Col span={6}>22</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={18}>Followups Due</Col>
+                          <Col span={6}>15</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={18}>Approval Due</Col>
+                          <Col span={6}>10</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={18}>New Requests</Col>
+                          <Col span={6}>12</Col>
+                        </Row>
+                      </div>
+                      {/* <div
                         className="redirect-link"
                         onClick={() => navigate("/policies-in-force")}
                       >
                         <span>
                           <img src={ShareIcon} alt="Share" />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
               </Col>
-              <Col className="gutter-row" span={6}>
+              <Col className="gutter-row" span={9}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         {" "}
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">12</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Pending ESignature</h5>
-                      <p className="card-desc">
+                      <h5 className="card-title">Top Market Demand</h5>
+                      <div className="card-desc">
+                        <Row gutter={16}>
+                          <Col span={9}>Annual Revenue</Col>
+                          <Col span={9}>Line</Col>
+                          <Col span={6}>Applied</Col>
+                        </Row>
+                        <hr/>
+                        <Row gutter={16}>
+                          <Col span={9}>$500K - $5 mn</Col>
+                          <Col span={9}>Excess Liability</Col>
+                          <Col span={6}>30% (+3%)</Col>
+                        </Row><br/>
+                        <Row gutter={16}>
+                          <Col span={9}>$100K - $50 mn</Col>
+                          <Col span={9}>Cyber</Col>
+                          <Col span={6}>27% (-5%)</Col>
+                        </Row><br/>
+                        <Row gutter={16}>
+                          <Col span={9}>$100K - $50mn</Col>
+                          <Col span={9}>Personal Auto</Col>
+                          <Col span={6}>22% (-5%)</Col>
+                        </Row><br/>
+                        <Row gutter={16}>
+                          <Col span={9}>$5mn - $10mn</Col>
+                          <Col span={9}>BoP</Col>
+                          <Col span={6}>25% (+3%)</Col>
+                        </Row>
+                      </div>
+                      {/* <p className="card-desc">
                         View list of pending ESignature and its summary
                       </p>
                       <div
@@ -149,12 +228,12 @@ const Dashboard = () => {
                         <span>
                           <img src={ShareIcon} />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
               </Col>
-              <Col className="gutter-row" span={6}>
+              {/* <Col className="gutter-row" span={6}>
                 <Card>
                   <div>
                     <div className="cardvalue-data">
@@ -181,7 +260,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </Card>
-              </Col>
+              </Col> */}
             </Row>
           </Container>
         </DashboardCard>
