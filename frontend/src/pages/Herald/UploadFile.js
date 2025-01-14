@@ -11,11 +11,12 @@ import {
 import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { uploadAccordForm } from 'constants/api';
+import usePost from "hooks/usePost";
 const StyledCard = styled(Card)`
   max-width: 800px;
   margin: 2rem auto;
-   box-shadow: 0px 6px 18px -2px #18181C1A;
+  box-shadow: 0px 6px 18px -2px #18181C1A;
   .ant-card-head-title {
     text-align: center;
     font-size: 24px;
@@ -47,8 +48,9 @@ const UploadContainer = styled.div`
 const UploadFile = () => {
   const [selection, setSelection] = useState(null);
   const [fileList, setFileList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { mutateAsync: fetchTextract } = usePost();
   const handleOptionSelect = (e) => {
     setSelection(e.target.value);
     setFileList([]);
@@ -65,12 +67,50 @@ const UploadFile = () => {
     }
   };
 
-  const handleNext = () => {
+  const handlePdfExtraction = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file.originFileObj);
+  
+  try {
+        const response = await fetchTextract({
+          url: uploadAccordForm,
+          payload: formData,
+          token: true,
+          // customHeaders: {
+          //   "Content-Type": "multipart/form-data",
+          // },
+        });
+  
+      if (!response.ok) {
+        const errorText = await response.text(); // Get error details
+        throw new Error(`Failed to upload and extract PDF: ${errorText}`);
+      }
+  
+      const extractedData = await response.json();
+      return extractedData;
+    } catch (error) {
+      message.error('Failed to process PDF: ' + error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNext = async () => {
     if (selection === 'manual') {
       navigate('/herald-product');
     } else if (selection === 'upload' && fileList.length > 0) {
-      console.log('Uploaded File:', fileList[0].originFileObj);
-      navigate('/herald-product');
+      try {
+        const extractedData = await handlePdfExtraction(fileList[0]);
+        // Navigate with the extracted data
+        navigate('/herald-product', { 
+          state: { 
+            data: extractedData 
+          }
+        });
+      } catch (error) {
+        console.error('PDF extraction failed:', error);
+      }
     } else {
       message.error('Please complete all required selections');
     }
@@ -101,7 +141,7 @@ const UploadFile = () => {
                 <div>
                   <h4>Upload File</h4>
                   <p style={{ color: 'rgba(0, 0, 0, 0.45)', marginTop: '8px' }}>
-                    Upload a file to auto-fill the necessary information
+                    Upload a PDF file to auto-fill the necessary information
                   </p>
                 </div>
               </Radio>
@@ -112,12 +152,13 @@ const UploadFile = () => {
         {selection === 'upload' && (
           <UploadContainer>
             <Upload
+              accept=".pdf"
               beforeUpload={() => false}
               onChange={handleFileChange}
               fileList={fileList}
               maxCount={1}
             >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Click to Upload PDF</Button>
             </Upload>
             {fileList.length > 0 && (
               <Alert
@@ -134,9 +175,10 @@ const UploadFile = () => {
           type="primary"
           block
           onClick={handleNext}
+          loading={loading}
           disabled={!selection || (selection === 'upload' && fileList.length === 0)}
         >
-          Next
+          {loading ? 'Processing...' : 'Next'}
         </Button>
       </Space>
     </StyledCard>
