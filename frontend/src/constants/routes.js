@@ -36,6 +36,10 @@ import ProducerProduction from 'pages/Dashboard/DashboardSubFeatures/ProducerPro
 import Premiumtrust from 'pages/Dashboard/DashboardSubFeatures/Premiumtrust';
 import Producerlossratio from 'pages/Dashboard/DashboardSubFeatures/Producerlossratio';
 import BulkQuote from 'pages/BulkQuote/BulkQuote';
+import HeraldProduct from 'pages/Herald/HeraldProduct';
+import HeraldForm from 'pages/Herald/HeraldForm';
+import QuotePage from 'pages/Herald/QuotePage';
+import UploadFile from 'pages/Herald/UploadFile';
 
 export const LoginRoute = {
     component: Login,
@@ -119,6 +123,33 @@ export const CreateFloodQuote = {
   restricted: true,
 }
 
+export const UploadFileOption = {
+  component: UploadFile,
+  path: '/upload-file',
+  restricted: true,
+}
+
+export const CreateHeraldProduct = {
+  component: HeraldProduct,
+  path: '/herald-product',
+  restricted: true,
+}
+export const CreateHeraldForm = {
+  component: HeraldForm,
+  path: '/herald-form',
+  restricted: true,
+}
+
+export const CreateQuotePage = {
+  component: QuotePage,
+  path: '/quote-page',
+  restricted: true,
+}
+export const CreateQuoteDetails = {
+  component: QuotePage,
+  path: '/quotedetails',
+  restricted: true,
+}
 export const AccountSettingsRoute = {
   component: Accountsetting,
   path: '/account-settings',
@@ -271,7 +302,7 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       AgentregistrationRoute,
-      ExpiringreportsRoute
+      ExpiringreportsRoute,
     ],
     "customer_login": [
       DashboardRoute,
@@ -301,6 +332,11 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       CreateFloodQuote,
+      UploadFileOption,
+      CreateHeraldProduct,
+      CreateHeraldForm,
+      CreateQuotePage,
+      CreateQuoteDetails,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,
@@ -338,6 +374,11 @@ const IRouteS = {
       ContactUsRoute,
       TermsOfUseRoute,
       CreateFloodQuote,
+      UploadFileOption,
+      CreateHeraldProduct,
+      CreateHeraldForm,
+      CreateQuotePage,
+      CreateQuoteDetails,
       AutomaticquoteRoute,
       AutoFillUpQuote,
       AlltransactionpaymentRoute,
