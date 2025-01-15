@@ -164,6 +164,10 @@ export default function PrivateNavbar() {
               label: "HomeOwners",
               key: "homeowners",
             },
+            {
+              label: "Cyber",
+              key: "cyber",
+            }
           ],
         },
         {
@@ -240,7 +244,9 @@ export default function PrivateNavbar() {
       navigate('/admin')
     } else if (e.key == 'homeowners') {
       navigate('/home-owners')
-    }else if (e.key == 'automaticquote') {
+    } else if (e.key == 'cyber') {
+      navigate('/upload-file')
+    } else if (e.key == 'automaticquote') {
       navigate('/automatic-quote');
     }else if (e.key == 'bulkquote') {
       navigate('/bulk-quote');

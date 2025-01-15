@@ -67,7 +67,7 @@ const DefaultStepper = ({ theme, state, steps, activeStep, handleNextStep, handl
             const quoteNumber = match ? match[1] : null;
             setNewpathName(`Quote - #${quoteNumber}`)
         } else {
-            setNewpathName('Create Quote')
+            setNewpathName('Create Application')
         }
     }, [PathName])
 
