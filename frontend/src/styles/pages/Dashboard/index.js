@@ -14,6 +14,7 @@ export const DashboardCard = styled.div`
   .ant-card-body {
     background: ${({ theme }) => themes[theme].dashboardCardBg};
     border-radius: 8px 8px;
+    height:300px;
   }
   .cardvalue-data {
     display: flex;
@@ -47,6 +48,13 @@ export const DashboardCard = styled.div`
   .card-desc {
     padding-top: 16px;
     color: ${({ theme }) => themes[theme].dashboardCardDesc};
+  }
+  .card-desc-datavalue {
+    padding-top: 16px;
+    color: #05004e;
+  }
+  .card-desc-datavalue strong {
+    color: #4f4f4f;
   }
   .card-content {
     margin: 24px 0 0px;
@@ -104,6 +112,12 @@ export const DashboardSection = styled.div`
       margin-top: 20px;
     }
   }
+  .graph-card-datavalue{
+    color:#05004e;
+  }
+  .graph-card-strong{
+     color: #4f4f4f;
+  }
   .quick-link {
     border: none;
     .quick-title {
@@ -149,7 +163,7 @@ export const GraphTitle = styled.h4`
   font-weight: 600;
   margin: 0px;
   line-height: 32px;
- color: ${({ theme }) => themes[theme].dashboardGraphTitle};
+  color: ${({ theme }) => themes[theme].dashboardGraphTitle};
 `;
 export const ProgressBarTable = styled.div`
   table {

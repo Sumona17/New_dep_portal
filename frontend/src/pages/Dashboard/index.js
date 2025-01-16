@@ -2,8 +2,8 @@ import { Row, Col, Card } from "antd";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { Container } from "styles/components/Layout";
-import ShareIcon from "assets/svg/share.svg";
-import ViewIcon from "assets/svg/view.svg";
+// import ShareIcon from "assets/svg/share.svg";
+// import ViewIcon from "assets/svg/view.svg";
 import QuickLionk from "assets/svg/quicklink.svg";
 import QuickLinkDark from "assets/images/quicklink-dark.png";
 import TargetDashboard from "assets/images/taget-dashboard.png";
@@ -12,16 +12,19 @@ import {
   DashboardSection,
   BannerImage,
   GraphTitle,
-  ProgressBarTable,
 } from "styles/pages/Dashboard";
-import ColumnChart from "components/Graphs/ColumnChart";
 import AreaChart from "components/Graphs/AreaChart";
-import ProgressBar from "components/ProgressBar";
-// import GeoMap from "components/GeoMap";
 import { jsonData } from "components/Graphs/AreaChart/areaChartDummyData";
 import QuoteReprintModal from "components/PopupModal/QuoteReprintModal";
-import PieChartNew from "components/Graphs/PieChart/PieChartNew";
 import useMetaData from "context/metaData";
+import HorizontalChart from "components/Graphs/HorizontalChart";
+
+import {
+  carrierSeries,
+  carrierCategories,
+  quoteSeries,
+  quoteCategories,
+} from "components/Graphs/HorizontalChart/chartData";
 
 const Dashboard = () => {
   const { theme } = useMetaData();
@@ -73,18 +76,55 @@ const Dashboard = () => {
         <DashboardCard theme={theme}>
           <Container>
             <Row gutter={16} className="mt-negative">
-              <Col className="gutter-row" span={6}>
+              <Col className="gutter-row" span={9}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">15</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Policy Transactions</h5>
-                      <p className="card-desc">
+                      <h5 className="card-title"> Coverage Insights</h5>
+                      <div className="card-desc-datavalue">
+                        <Row gutter={16}>
+                          <Col span={7}>
+                            <strong>Product</strong>
+                          </Col>
+                          <Col span={9}>
+                            <strong>Better Conversion</strong>
+                          </Col>
+                          <Col span={6}>
+                            <strong>Rated or Referred</strong>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={7}>Cyber</Col>
+                          <Col span={9}>$50K - $1mn</Col>
+                          <Col span={6}>47%</Col>
+                        </Row>
+                        <br />
+                        <Row gutter={16}>
+                          <Col span={7}>
+                            <strong>Product</strong>
+                          </Col>
+                          <Col span={9}>
+                            <strong>Least Conversion</strong>
+                          </Col>
+                          <Col span={6}>
+                            <strong>Rejected or Abandoned</strong>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={7}>Excess Liability</Col>
+                          <Col span={9}>$10mn - $50mn</Col>
+                          <Col span={6}>37%</Col>
+                        </Row>
+                      </div>
+                      {/* <p className="card-desc">
                         View list of policies that need review along with the
                         transaction details
                       </p>
@@ -95,7 +135,7 @@ const Dashboard = () => {
                         <span>
                           <img src={ShareIcon} alt="Share" />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
@@ -103,43 +143,162 @@ const Dashboard = () => {
               <Col className="gutter-row" span={6}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         {" "}
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">18</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Policies In Force</h5>
-                      <p className="card-desc">
-                        View list of Policies that are active as of today
-                      </p>
-                      <div
+                      <h5 className="card-title">Alerts and Reminders</h5>
+                      <div className="card-desc-datavalue">
+                        <Row gutter={16}>
+                          <Col span={18}>Renewal Due</Col>
+                          <Col span={6}>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate("/search-quote")}
+                            >
+                              17
+                            </span>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={18}>Conversion Deadline</Col>
+                          <Col span={6}>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate("/search-quote")}
+                            >
+                              22
+                            </span>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={18}>Followups Due</Col>
+                          <Col span={6}>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate("/search-quote")}
+                            >
+                              15
+                            </span>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={18}>Approval Due</Col>
+                          <Col span={6}>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate("/search-quote")}
+                            >
+                              10
+                            </span>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={18}>New Requests</Col>
+                          <Col span={6}>
+                            {" "}
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate("/search-quote")}
+                            >
+                              12
+                            </span>
+                          </Col>
+                        </Row>
+                      </div>
+                      {/* <div
                         className="redirect-link"
                         onClick={() => navigate("/policies-in-force")}
                       >
                         <span>
                           <img src={ShareIcon} alt="Share" />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
               </Col>
-              <Col className="gutter-row" span={6}>
+              <Col className="gutter-row" span={9}>
                 <Card>
                   <div>
-                    <div className="cardvalue-data">
+                    {/* <div className="cardvalue-data">
                       <span className="viewicon">
                         {" "}
                         <img src={ViewIcon} />
                       </span>
                       TOTAL<span className="card-value">12</span>
-                    </div>
+                    </div> */}
                     <div className="card-content">
-                      <h5 className="card-title">Pending ESignature</h5>
-                      <p className="card-desc">
+                      <h5 className="card-title">Top Market Demand</h5>
+                      <div className="card-desc-datavalue">
+                        <Row gutter={16}>
+                          <Col span={8}>
+                            <strong>Annual Revenue</strong>
+                          </Col>
+                          <Col span={8}>
+                            <strong>Line</strong>
+                          </Col>
+                          <Col span={6}>
+                            <strong>Applied</strong>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row gutter={16}>
+                          <Col span={8}>$500K - $5 mn</Col>
+                          <Col span={8}>Excess Liability</Col>
+                          <Col span={6}>
+                            30% <span style={{ color: "green" }}>(+3%)</span>
+                          </Col>
+                        </Row>
+                        <br />
+                        <Row gutter={16}>
+                          <Col span={8}>$100K - $50 mn</Col>
+                          <Col span={8}>Cyber</Col>
+                          <Col span={5}>
+                            27% <span style={{ color: "red" }}>(-5%)</span>
+                          </Col>
+                        </Row>
+                        <br />
+                        <Row gutter={16}>
+                          <Col span={8}>$100K - $50mn</Col>
+                          <Col span={8}>Personal Auto</Col>
+                          <Col span={6}>
+                            22% <span style={{ color: "red" }}>(-5%)</span>
+                          </Col>
+                        </Row>
+                        <br />
+                        <Row gutter={16}>
+                          <Col span={8}>$5mn - $10mn</Col>
+                          <Col span={8}>BoP</Col>
+                          <Col span={6}>
+                            25% <span style={{ color: "green" }}>(+3%)</span>{" "}
+                          </Col>
+                        </Row>
+                      </div>
+                      {/* <p className="card-desc">
                         View list of pending ESignature and its summary
                       </p>
                       <div
@@ -149,12 +308,12 @@ const Dashboard = () => {
                         <span>
                           <img src={ShareIcon} />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </Card>
               </Col>
-              <Col className="gutter-row" span={6}>
+              {/* <Col className="gutter-row" span={6}>
                 <Card>
                   <div>
                     <div className="cardvalue-data">
@@ -181,17 +340,83 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </Card>
-              </Col>
+              </Col> */}
             </Row>
           </Container>
         </DashboardCard>
         <Container className="mt-positive pb">
           <Row gutter={16} className="gp">
-            <Col className="gutter-row" span={10}>
+            <Col className="gutter-row" span={9}>
               <Card className="graph-card">
-                <GraphTitle theme={theme}>All Payments Received</GraphTitle>
-                <ColumnChart theme={theme} />
-                <div
+                <GraphTitle theme={theme}>Line Perfomance</GraphTitle>
+                <div className="graph-card-strong">
+                  <Row gutter={10}>
+                    <Col span={6}>
+                      <strong>Line</strong>
+                    </Col>
+                    <Col span={5}>
+                      <strong>Quote</strong>
+                    </Col>
+                    <Col span={5}>
+                      <strong>Referred</strong>
+                    </Col>
+                    <Col span={4}>
+                      <strong>Carrier Follow Ups</strong>
+                    </Col>
+                    <Col span={4}>
+                      <strong>Client Follow Ups</strong>
+                    </Col>
+                  </Row>
+                  <hr />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>Cyber</Col>
+                    <Col span={5}>75</Col>
+                    <Col span={5}>15</Col>
+                    <Col span={4}>5</Col>
+                    <Col span={4}>7</Col>
+                  </Row>
+                  <br />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>BoP</Col>
+                    <Col span={5}>32</Col>
+                    <Col span={5}>5</Col>
+                    <Col span={4}>2</Col>
+                    <Col span={4}>1</Col>
+                  </Row>
+                  <br />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>D & O</Col>
+                    <Col span={5}>15</Col>
+                    <Col span={5}>5</Col>
+                    <Col span={4}>0</Col>
+                    <Col span={4}>3</Col>
+                  </Row>
+                  <br />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>Personal Auto</Col>
+                    <Col span={5}>25</Col>
+                    <Col span={5}>7</Col>
+                    <Col span={4}>3</Col>
+                    <Col span={4}>1</Col>
+                  </Row>
+                  <br />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>Personal Prop</Col>
+                    <Col span={5}>20</Col>
+                    <Col span={5}>12</Col>
+                    <Col span={4}>5</Col>
+                    <Col span={4}>5</Col>
+                  </Row>
+                  <br />
+                  <Row className="graph-card-datavalue" gutter={16}>
+                    <Col span={6}>Other</Col>
+                    <Col span={5}>15</Col>
+                    <Col span={5}>10</Col>
+                    <Col span={4}>2</Col>
+                    <Col span={4}>5</Col>
+                  </Row>
+                </div>
+                {/* <div
                   style={{
                     display: "flex",
                     justifyContent: "flex-end",
@@ -202,89 +427,16 @@ const Dashboard = () => {
                   <span>
                     <img src={ShareIcon} />
                   </span>
-                </div>
+                </div> */}
+              
               </Card>
               <Card className="graph-card mt">
-                <GraphTitle theme={theme}>Producer Product Details</GraphTitle>
-                <ProgressBarTable theme={theme}>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Transaction</th>
-                        <th>Popularity</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Total Net Written</td>
-                        <td>
-                          <ProgressBar
-                            percent={45}
-                            status="active"
-                            strokeColor="#0095FF"
-                          />
-                        </td>
-                        <td>
-                          <span className="progressvalue nfip-progressvalue">
-                            45
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Renewal</td>
-                        <td>
-                          <ProgressBar
-                            percent={29}
-                            status="active"
-                            strokeColor="#9DC8BE"
-                          />
-                        </td>
-                        <td>
-                          <span className="progressvalue focusflood-progressvalue">
-                            29
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Endorsement</td>
-                        <td>
-                          <ProgressBar
-                            percent={18}
-                            status="active"
-                            strokeColor="#884DFF"
-                          />
-                        </td>
-                        <td>
-                          <span className="progressvalue excess-progressvalue">
-                            18
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Cancel Premiums</td>
-                        <td>
-                          <ProgressBar
-                            percent={10}
-                            status="active"
-                            strokeColor="#FF0000"
-                          />
-                        </td>
-                        <td>
-                          <span className="progressvalue brokerage-progressvalue">
-                            10
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </ProgressBarTable>
-                <div
+                <GraphTitle theme={theme}>Carrier Perfomance</GraphTitle>
+                <HorizontalChart
+                  series={carrierSeries}
+                  categories={carrierCategories}
+                />
+                {/* <div
                   style={{
                     display: "flex",
                     justifyContent: "flex-end",
@@ -295,32 +447,22 @@ const Dashboard = () => {
                   <span>
                     <img src={ShareIcon} />
                   </span>
-                </div>
+                </div> */}
               </Card>
             </Col>
-            <Col className="gutter-row" span={7}>
-              <Card className="graph-card area-chart-card">
-                <GraphTitle theme={theme}>Premium Trust Deposits</GraphTitle>
-                <AreaChart theme={theme} data={jsonData.data} series={series} />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate("/Premiumtrust")}
-                >
-                  <span>
-                    <img src={ShareIcon} />
-                  </span>
-                </div>
+            <Col className="gutter-row" span={9}>
+              <Card className="graph-card">
+                <GraphTitle theme={theme}>Quote To Bind Ratio</GraphTitle>
+                <AreaChart  theme={theme} data={jsonData.data} series={series} />
               </Card>
               <Card className="graph-card mt">
-                <GraphTitle theme={theme}>
-                  Producer Loss Ratio by Coverage
-                </GraphTitle>
-                <PieChartNew />
-                <div
+                <GraphTitle theme={theme}>Quote Status</GraphTitle>
+                <HorizontalChart
+                  theme={theme}
+                  series={quoteSeries}
+                  categories={quoteCategories}
+                />
+                {/* <div
                   style={{
                     display: "flex",
                     justifyContent: "flex-end",
@@ -331,10 +473,10 @@ const Dashboard = () => {
                   <span>
                     <img src={ShareIcon} />
                   </span>
-                </div>
+                </div> */}
               </Card>
             </Col>
-            <Col className="gutter-row gutter-row full-height-col" span={7}>
+            <Col className="gutter-row gutter-row full-height-col" span={6}>
               <div className="col-content full-height">
                 <Card className="quick-link">
                   <h4 className="quick-title">
