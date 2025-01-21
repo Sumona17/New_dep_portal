@@ -1,48 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, Select, DatePicker, Button, message, Spin, Tabs, Row, Col, Checkbox, Modal, Space } from "antd";
 import axios from "axios";
+import FileUploadForm from "./FormPrefill";
 import moment from "moment";
 import { FormInputFeild } from "styles/components/FormControl";
+// import { mockApplicationData } from './mockApplicationData';
 // import { useNavigate } from 'react-router-dom';
 // // import useMetaData from "context/metaData";
 import { useLocation } from "react-router-dom";
-
+// import useGet from 'hooks/useGet';
+// import usePost from "hooks/usePost";
+// import { getPrefill } from 'constants/api';
+// import pdfData from "../../assets/files/App-Cyber_EDITED.pdf";
 const { TabPane } = Tabs;
 const { Option } = Select;
 
-const DynamicForm = ( {state,
+// const FormData = require('form-data');
 
+
+const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) => {
  
-  theme,
-  onUpdateFormData,
-  isReviewStep,
-
-
-  onNext
-}) => {
-  const [form] = Form.useForm();
-  const [ applicationData, setApplicationData] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentTab, setCurrentTab] = useState("risk_values");
+
   const [industryOptions, setIndustryOptions] = useState([]);
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: null });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
   // const [riskValuesData, ] = useState({});
   // const [coverageValuesData, ] = useState({});
-//   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
-  const [, setPrefillDataCache] = useState({});
-// const navigate = useNavigate();
-const location = useLocation();
-const selectedProducts = location.state?.selectedProducts || [];
+  //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
+  
+  // const navigate = useNavigate();
+  const [form] = Form.useForm();
+  // const [prefillDataCache, ] = useState({});
+  const [currentTab, setCurrentTab] = useState('risk_values'); // or whatever your tab value is
 
+  const location = useLocation();
+  const selectedProducts = location.state?.selectedProducts || [];
+  // const { mutateAsync: fetchTextract } = usePost();
   useEffect(() => {
     const fetchApplicationData = async () => {
       try {
         const response = await axios.post(
           "https://sandbox.heraldapi.com/applications",
           {
-             products: selectedProducts 
+            products: selectedProducts
           },
           {
             headers: {
@@ -95,21 +98,22 @@ const selectedProducts = location.state?.selectedProducts || [];
       message.error("Failed to fetch industry classification data.");
     }
   };
-  const handleNext = async () => {
-    try {
-        const values = await form.validateFields();
-        onUpdateFormData(currentTab, values);
-        
-        if (currentTab === "risk_values") {
-            setCurrentTab("coverage_values");
-        } else if (currentTab === "coverage_values") {
-            onNext(); // Move to next step in parent component
-        }
-    } catch (errorInfo) {
-        console.log('Form validation failed:', errorInfo);
-        message.error('Please fill in all required fields correctly.');
-    }
-};
+    const handleNext = async () => {
+      try {
+          const values = await form.validateFields();
+          onUpdateFormData(currentTab, values);
+
+          if (currentTab === "risk_values") {
+              setCurrentTab("coverage_values");
+          } else if (currentTab === "coverage_values") {
+              onNext(); // Move to next step in parent component
+          }
+      } catch (errorInfo) {
+          console.log('Form validation failed:', errorInfo);
+          message.error('Please fill in all required fields correctly.');
+      }
+  }; 
+ 
   const handleSubmit = async () => {
     try {
       // Validate and save Coverage Values data
@@ -255,11 +259,11 @@ const selectedProducts = location.state?.selectedProducts || [];
   const handleFinalSubmission = async () => {
     try {
       // Predefined products list
-    //   const products = [
-    //     "prd_0050_herald_cyber",
-    //     "prd_la3v_atbay_cyber",
-    //     "prd_jk0g_cowbell_cyber"
-    //   ];
+      //   const products = [
+      //     "prd_0050_herald_cyber",
+      //     "prd_la3v_atbay_cyber",
+      //     "prd_jk0g_cowbell_cyber"
+      //   ];
 
       // Prepare submission payload
       const submissionPayload = {
@@ -324,187 +328,237 @@ const selectedProducts = location.state?.selectedProducts || [];
   };
 
 
-//   const handleGetQuote = () => {
-//     navigate('/quote-page', {
-//         state: {
-//             formData: { ...riskValuesData, ...formData?.coverageValues },
-//             applicationData
-//         }
-//     });
-// }
+  //   const handleGetQuote = () => {
+  //     navigate('/quote-page', {
+  //         state: {
+  //             formData: { ...riskValuesData, ...formData?.coverageValues },
+  //             applicationData
+  //         }
+  //     });
+  // }
 
   // Updated handlePrefill function
- const handlePrefill = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.get(
-      "https://sandbox.heraldapi.com/applications/f835ece6-bb01-4653-bd53-bbb58d99f2fc",
-      {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=",
-        },
-      }
-    );
+  // Modified handlePrefill function in DynamicForm component
 
-    if (response.data && response.data.application) {
-      const {
-        risk_values = [],
-        coverage_values = [],
-        status = "incomplete",
-      } = response.data.application;
 
-      console.log("Fetched Risk Values:", risk_values);
-      console.log("Fetched Coverage Values:", coverage_values);
-      console.log("Fetched Status:", status);
-
-      const prefillData = {};
-
-      const processFields = (fields, type) => {
-        console.log(`Processing ${type} Fields:`, fields);
-
-        fields.forEach((field) => {
-          const fieldId = field.risk_parameter_id || field.coverage_parameter_id;
-
-          if (!fieldId) {
-            console.warn(`Missing field ID for ${type} field:`, field);
-            return;
-          }
-
-          // Handle existing values from the API
-          if (field.value !== undefined) {
-            prefillData[fieldId] = field.value;
-            return;
-          }
-
-          // Default value handling based on input type
-          switch (field.input_type) {
-            case "short_text":
-              prefillData[fieldId] = field.schema?.default || `Sample ${field.parameter_text?.agent_facing_text || "Text"}`;
-              break;
-            case "integer":
-            case "number":
-              prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
-              break;
-            case "email":
-              prefillData[fieldId] = `sample_${Math.random().toString(36).substring(7)}@example.com`;
-              break;
-            case "phone":
-              prefillData[fieldId] = `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`;
-              break;
-            case "select_one":
-              prefillData[fieldId] = field.schema?.default || (field.schema?.enum?.length ? field.schema.enum[0] : null);
-              break;
-            case "select_many":
-              prefillData[fieldId] = field.schema?.default || (field.schema?.items?.enum?.length ? [field.schema.items.enum[0]] : []);
-              break;
-            case "date":
-              prefillData[fieldId] = field.schema?.default || moment().format("YYYY-MM-DD");
-              break;
-            case "address":
-              if (field.schema?.properties) {
-                Object.keys(field.schema.properties).forEach((key) => {
-                  const propertySchema = field.schema.properties[key];
-                  prefillData[`${fieldId}.${key}`] =
-                    propertySchema?.default ||
-                    propertySchema?.enum?.[0] ||
-                    `Sample ${propertySchema?.title || key}`;
-                });
-              }
-              break;
-            case "currency":
-              prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
-              break;
-            default:
-              prefillData[fieldId] = `Sample ${field.parameter_text?.agent_facing_text || "Field"}`;
+  // const handlePrefill = async () => {
+   
+  //   try {
+  //     setLoading(true);
+  
+  //     // Ensure `query` is defined
+  //     const query = { value: "default value" }; // Replace with appropriate initialization or state
+  
+  //     // Ensure `publicData` is defined
+  //     const publicData = false; // Replace with actual logic or value
+  
+  //     // Step 1: Fetch PDF data from the custom API
+  //     const pdfResponse = await axios.post(
+  //       'http://18.206.236.54:5000/api/process_doc',
+  //       {
+  //         query: `Fetch the document and provide a detailed summary and analysis for "${query.value}" along with PDF details.`,
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+  
+  //     let pdfData = [];
+  //     if (pdfResponse.status === 200) {
+  //       // Assuming `pdfResponse.data.results` contains an array of PDF URLs or Base64 data
+  //       pdfData = Array.from(
+  //         new Set(pdfResponse.data.results.map((pdfUrlOrBase64) => pdfUrlOrBase64))
+  //       );
+  
+  //       // Store PDFs in the state or local storage
+  //       if (publicData) {
+  //         const capturedDocuments = JSON.parse(localStorage.getItem('capturedDocuments') || '[]');
+  //         const publicDataPdfs = capturedDocuments.map((data) => data.pdf);
+  //         pdfData = [...pdfData, ...publicDataPdfs];
+  //       }
+  
+  //       setRefDocuments(pdfData); // Update the state with fetched PDFs
+  //     }
+  
+  //     // Step 2: Fetch form data and process prefill
+  //     const formResponse = await axios.get(/* API endpoint for fetching form data */);
+  
+  //     if (formResponse.data && formResponse.data.application) {
+  //       const { risk_values = [], coverage_values = [] } = formResponse.data.application;
+  
+  //       const prefillData = {};
+  
+  //       const processFields = (fields, type) => {
+  //         fields.forEach((field) => {
+  //           const fieldId = field.risk_parameter_id || field.coverage_parameter_id;
+  
+  //           if (!fieldId) {
+  //             console.warn(`Missing field ID for ${type} field:`, field);
+  //             return;
+  //           }
+  
+  //           if (field.value !== undefined) {
+  //             prefillData[fieldId] = field.value;
+  //             return;
+  //           }
+  
+  //           switch (field.input_type) {
+  //             case 'short_text':
+  //               prefillData[fieldId] = field.schema?.default || `Sample ${field.parameter_text?.agent_facing_text || 'Text'}`;
+  //               break;
+  //             case 'integer':
+  //             case 'number':
+  //               prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
+  //               break;
+  //             case 'email':
+  //               prefillData[fieldId] = `sample_${Math.random().toString(36).substring(7)}@example.com`;
+  //               break;
+  //             case 'phone':
+  //               prefillData[fieldId] = `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+  //               break;
+  //             case 'select_one':
+  //               prefillData[fieldId] = field.schema?.default || (field.schema?.enum?.length ? field.schema.enum[0] : null);
+  //               break;
+  //             case 'select_many':
+  //               prefillData[fieldId] = field.schema?.default || (field.schema?.items?.enum?.length ? [field.schema.items.enum[0]] : []);
+  //               break;
+  //             case 'date':
+  //               prefillData[fieldId] = field.schema?.default || moment().format('YYYY-MM-DD');
+  //               break;
+  //             case 'address':
+  //               if (field.schema?.properties) {
+  //                 Object.keys(field.schema.properties).forEach((key) => {
+  //                   const propertySchema = field.schema.properties[key];
+  //                   prefillData[`${fieldId}.${key}`] = propertySchema?.default || propertySchema?.enum?.[0] || `Sample ${propertySchema?.title || key}`;
+  //                 });
+  //               }
+  //               break;
+  //             case 'currency':
+  //               prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
+  //               break;
+  //             default:
+  //               prefillData[fieldId] = `Sample ${field.parameter_text?.agent_facing_text || 'Field'}`;
+  //           }
+  //         });
+  //       };
+  
+  //       processFields(risk_values, 'Risk');
+  //       processFields(coverage_values, 'Coverage');
+  
+  //       setPrefillDataCache(prefillData);
+  
+  //       const currentTabFields =
+  //         currentTab === 'risk_values'
+  //           ? risk_values.map((f) => f.risk_parameter_id)
+  //           : coverage_values.map((f) => f.coverage_parameter_id);
+  
+  //       const currentTabData = Object.keys(prefillData)
+  //         .filter((key) => currentTabFields.includes(key))
+  //         .reduce((obj, key) => {
+  //           obj[key] = prefillData[key];
+  //           return obj;
+  //         }, {});
+  
+  //       form.setFieldsValue(currentTabData);
+  
+  //       message.success('Form prefilled successfully!');
+  //       window.scrollTo(0, 0);
+  //     } else {
+  //       throw new Error('Invalid API response format');
+  //     }
+  
+  //     // Step 3: Optionally, log or handle the PDF data in conjunction with the form
+  //     console.log('PDF Data:', pdfData);
+  //     console.log('Form prefill data:', formResponse.data);
+  //   } catch (error) {
+  //     console.error('Error during prefill and PDF fetch:', error);
+  //     message.error('Failed to fetch and prefill: ' + (error.response?.data?.message || error.message));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const handleUpdate = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://sandbox.heraldapi.com/applications/f835ece6-bb01-4653-bd53-bbb58d99f2fc",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=",
+          },
+        }
+      );
+   
+      if (response.data && response.data.application) {
+        const { risk_values = [] } = response.data.application;
+       
+        // Create an object to store the field values
+        const updatedValues = {};
+       
+        risk_values.forEach(field => {
+          const fieldId = field.risk_parameter_id;
+          if (fieldId && field.value !== undefined) {
+            updatedValues[fieldId] = field.value;
           }
         });
-      };
-
-      // Process both risk and coverage values
-      processFields(risk_values, "Risk");
-      processFields(coverage_values, "Coverage");
-
-      // Update status to "complete"
-      prefillData["status"] = "complete";
-      console.log("Updated Status: complete");
-
-      console.log("Final Prefill Data:", prefillData);
-
-      // Store the complete prefill data in the cache
-      setPrefillDataCache(prefillData);
-
-      // Set initial form values based on current tab
-      const currentTabFields =
-        currentTab === "risk_values"
-          ? risk_values.map((f) => f.risk_parameter_id)
-          : coverage_values.map((f) => f.coverage_parameter_id);
-
-      const currentTabData = Object.keys(prefillData)
-        .filter((key) => currentTabFields.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = prefillData[key];
-          return obj;
-        }, {});
-
-      // Add status to form fields
-      currentTabData["status"] = "complete";
-
-      // Set form fields for current tab
-      form.setFieldsValue(currentTabData);
-
-      message.success("Form prefilled successfully!");
-      window.scrollTo(0, 0);
-    } else {
-      throw new Error("Invalid API response format");
+   
+        // Update the form with new values
+        form.setFieldsValue(updatedValues);
+        message.success("Form updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating form:", error);
+      message.error("Failed to update the form: " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Error during prefill:", error);
-    message.error("Failed to prefill the form: " + (error.response?.data?.message || error.message));
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-
-
-const renderModalContent = () => {
-  const isSuccess = submitStatus.type === 'success';
+  };
+   
   
-  return (
+
+
+
+
+
+
+  const renderModalContent = () => {
+    const isSuccess = submitStatus.type === 'success';
+
+    return (
       <div style={{ textAlign: 'center' }}>
-          <div style={{
-              fontSize: '24px',
-              marginBottom: '16px',
-              color: isSuccess ? '#52c41a' : '#ff4d4f'
-          }}>
-              {isSuccess ? '✓' : '✕'}
-          </div>
-          <p style={{
-              fontSize: '16px',
-              marginBottom: '24px',
-              color: isSuccess ? '#52c41a' : '#ff4d4f'
-          }}>
-              {submitStatus.message}
-          </p>
-          <Space>
-              <Button onClick={() => setIsModalVisible(false)}>
-                  Close
-              </Button>
-              {isSuccess && (
-                  <Button type="primary" onClick={() => {
-                      setIsModalVisible(false);
-                      onNext();
-                  }}>
-                      Get Quote
-                  </Button>
-              )}
-          </Space>
+        <div style={{
+          fontSize: '24px',
+          marginBottom: '16px',
+          color: isSuccess ? '#52c41a' : '#ff4d4f'
+        }}>
+          {isSuccess ? '✓' : '✕'}
+        </div>
+        <p style={{
+          fontSize: '16px',
+          marginBottom: '24px',
+          color: isSuccess ? '#52c41a' : '#ff4d4f'
+        }}>
+          {submitStatus.message}
+        </p>
+        <Space>
+          <Button onClick={() => setIsModalVisible(false)}>
+            Close
+          </Button>
+          {isSuccess && (
+            <Button type="primary" onClick={() => {
+              setIsModalVisible(false);
+              onNext();
+            }}>
+              Get Quote
+            </Button>
+          )}
+        </Space>
       </div>
-  );
-};
+    );
+  };
   const renderConfirmationModal = () => {
     return (
       <Modal
@@ -541,15 +595,17 @@ const renderModalContent = () => {
 
     return (
       <div>
-        {/* Prefill button positioned above and to the right */}
         {currentTab === "risk_values" && (
-          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-            <Button type="default" onClick={handlePrefill}>
-              Prefill
+  <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+    <FileUploadForm 
+      form={form}
+      applicationData={applicationData} // Pass the full application data
+    />
+    <Button type="primary" onClick={handleUpdate}>
+              Update
             </Button>
-          </div>
-        )}
-    
+  </div>
+)}
         <Form
           form={form}
           layout="vertical"
@@ -561,6 +617,7 @@ const renderModalContent = () => {
             });
             setIsModalVisible(true);
           }}
+
         >
           <Row gutter={16}>
             {["Basic Information", "Risk Information"].map((sectionName) => (
@@ -586,7 +643,7 @@ const renderModalContent = () => {
                 {fields.map((field) => renderField(field))}
               </div>
             ))}
-    
+
           {currentTab !== "risk_values" && (
             <Form.Item>
               {/* Optional Submit Button */}
@@ -595,7 +652,7 @@ const renderModalContent = () => {
         </Form>
       </div>
     );
-    
+
   };
   const renderField = (field) => {
     const { risk_parameter_id, coverage_parameter_id, parameter_text, input_type, schema, section } = field;
@@ -661,29 +718,29 @@ const renderModalContent = () => {
 
         // Default `short_text` case for other fields
         return (
-             <FormInputFeild  theme={theme}>
-          <Form.Item
-            key={fieldKey}
-            name={fieldKey}
-            label={parameter_text.agent_facing_text}
-            rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
-          >
-            <Input placeholder={`Enter ${parameter_text.agent_facing_text}`} />
-          </Form.Item>
+          <FormInputFeild theme={theme}>
+            <Form.Item
+              key={fieldKey}
+              name={fieldKey}
+              label={parameter_text.agent_facing_text}
+              rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
+            >
+              <Input placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+            </Form.Item>
           </FormInputFeild>
         );
 
       case "integer":
         return (
-            <FormInputFeild  theme={theme}>
-          <Form.Item
-            key={fieldKey}
-            name={fieldKey}
-            label={parameter_text.agent_facing_text}
-            rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
-          >
-            <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
-          </Form.Item>
+          <FormInputFeild theme={theme}>
+            <Form.Item
+              key={fieldKey}
+              name={fieldKey}
+              label={parameter_text.agent_facing_text}
+              rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
+            >
+              <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+            </Form.Item>
           </FormInputFeild>
         );
       case "email":
@@ -694,7 +751,7 @@ const renderModalContent = () => {
             label={parameter_text.agent_facing_text}
             rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
           >
-            <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+            <Input style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
           </Form.Item>
         );
       case "phone":
@@ -705,7 +762,7 @@ const renderModalContent = () => {
             label={parameter_text.agent_facing_text}
             rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
           >
-            <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+            <Input style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
           </Form.Item>
         );
       case "select_one":
@@ -744,54 +801,54 @@ const renderModalContent = () => {
             </Select>
           </Form.Item>
         );
-        case "date":
-          return (
-            <Form.Item
-              key={fieldKey}
-              name={fieldKey}
-              label={parameter_text.agent_facing_text}
-              rules={[
-                { required: false, message: `Please select ${parameter_text.agent_facing_text}` },
-                {
-                  validator: (_, value) => {
-                    if (!value) return Promise.resolve();
-                    const selectedDate = moment(value);
-                    const minDate = moment(schema.min_date);
-                    const maxDate = moment(schema.max_date);
-      
-                    if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
-                      return Promise.reject(
-                        new Error(`Date must be between ${schema.min_date} and ${schema.max_date}`)
-                      );
-                    }
-                    return Promise.resolve();
-                  },
+      case "date":
+        return (
+          <Form.Item
+            key={fieldKey}
+            name={fieldKey}
+            label={parameter_text.agent_facing_text}
+            rules={[
+              { required: false, message: `Please select ${parameter_text.agent_facing_text}` },
+              {
+                validator: (_, value) => {
+                  if (!value) return Promise.resolve();
+                  const selectedDate = moment(value);
+                  const minDate = moment(schema.min_date);
+                  const maxDate = moment(schema.max_date);
+
+                  if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
+                    return Promise.reject(
+                      new Error(`Date must be between ${schema.min_date} and ${schema.max_date}`)
+                    );
+                  }
+                  return Promise.resolve();
                 },
-              ]}
-              // Add getValueProps to format the date value before form submission
-              getValueProps={(value) => ({
-                value: value ? moment(value) : undefined
-              })}
-              // Add getValueFromEvent to format the date when it changes
-              getValueFromEvent={(date) => {
-                if (!date) return undefined;
-                return moment(date).format('YYYY-MM-DD');
-              }}
-            >
-              <DatePicker 
-                style={{ width: "100%" }} 
-                placeholder={`Select ${parameter_text.agent_facing_text}`}
-                format="YYYY-MM-DD"  // Explicitly set the display format
-              />
-            </Form.Item>
-          );
+              },
+            ]}
+            // Add getValueProps to format the date value before form submission
+            getValueProps={(value) => ({
+              value: value ? moment(value) : undefined
+            })}
+            // Add getValueFromEvent to format the date when it changes
+            getValueFromEvent={(date) => {
+              if (!date) return undefined;
+              return moment(date).format('YYYY-MM-DD');
+            }}
+          >
+            <DatePicker
+              style={{ width: "100%" }}
+              placeholder={`Select ${parameter_text.agent_facing_text}`}
+              format="YYYY-MM-DD"  // Explicitly set the display format
+            />
+          </Form.Item>
+        );
       case "address":
         return (
           <div key={fieldKey}>
             <h4>{parameter_text.agent_facing_text}</h4>
             {Object.entries(schema.properties).map(([key, propertySchema]) => {
               const fullKey = `${fieldKey}.${key}`;
-            //   const isRequired = schema.required.includes(key);
+              //   const isRequired = schema.required.includes(key);
               return (
                 <Form.Item
                   key={fullKey}
@@ -829,7 +886,8 @@ const renderModalContent = () => {
             })}
           </div>
         );
-      case "currency": // New case for currency input type
+     
+        case "currency": // New case for currency input type
         return (
           <Form.Item
             key={fieldKey}
@@ -848,27 +906,27 @@ const renderModalContent = () => {
             />
           </Form.Item>
         );
-    //   case "select_one":
-    //     const isIndustryField = parameter_text.agent_facing_text === "Industry classification";
-    //     const options = isIndustryField ? industryOptions : schema.enum;
+      //   case "select_one":
+      //     const isIndustryField = parameter_text.agent_facing_text === "Industry classification";
+      //     const options = isIndustryField ? industryOptions : schema.enum;
 
-    //     return (
-    //       <Form.Item
-    //         key={fieldKey}
-    //         name={fieldKey}
-    //         label={parameter_text.agent_facing_text}
-    //         rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
-    //       >
-    //         <Select placeholder={`Select ${parameter_text.agent_facing_text}`}>
-    //           {options &&
-    //             options.map((option) => (
-    //               <Option key={option.code || option} value={option.code || option}>
-    //                 {option.title || option}
-    //               </Option>
-    //             ))}
-    //         </Select>
-    //       </Form.Item>
-    //     );
+      //     return (
+      //       <Form.Item
+      //         key={fieldKey}
+      //         name={fieldKey}
+      //         label={parameter_text.agent_facing_text}
+      //         rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
+      //       >
+      //         <Select placeholder={`Select ${parameter_text.agent_facing_text}`}>
+      //           {options &&
+      //             options.map((option) => (
+      //               <Option key={option.code || option} value={option.code || option}>
+      //                 {option.title || option}
+      //               </Option>
+      //             ))}
+      //         </Select>
+      //       </Form.Item>
+      //     );
 
       default:
         return null;
@@ -884,70 +942,95 @@ const renderModalContent = () => {
     return <p style={{ textAlign: "center", marginTop: "20%" }}>No application data available.</p>;
   }
 
-  // const handleTabChange = (key) => {
-  //   setCurrentTab(key);
-    
-  //   // If we have prefilled data, set the appropriate fields for the new tab
-  //   if (Object.keys(prefillDataCache).length > 0) {
-  //     const relevantFields = applicationData[key].map(
-  //       field => field.risk_parameter_id || field.coverage_parameter_id
-  //     );
-      
-  //     const tabData = Object.keys(prefillDataCache)
-  //       .filter(key => relevantFields.includes(key))
-  //       .reduce((obj, key) => {
-  //         obj[key] = prefillDataCache[key];
-  //         return obj;
-  //       }, {});
-      
-  //     form.setFieldsValue(tabData);
-  //   } else {
-  //     form.resetFields();
+  // const handleTabChange = async () => {
+  //   try {
+  //     // Validate form fields before proceeding
+  //     const values = await form.validateFields();
+  //     onUpdateFormData(currentTab, values); // Update the form data in parent component
+
+  //     // If we are at "Review" step, just proceed to the next step
+  //     if (currentTab !== "review") {
+  //       // Determine the next tab if it's not the "review" tab
+  //       let nextTab;
+  //       if (currentTab === "risk_values") {
+  //         nextTab = "coverage_values";  // Move from risk_values to coverage_values
+  //       } else if (currentTab === "coverage_values") {
+  //         nextTab = "review"; // Move from coverage_values to review
+  //       }
+
+  //       // Update the current tab (this is for normal tab navigation)
+  //       setCurrentTab(nextTab);
+
+  //       // Check if prefilled data exists and ensure applicationData[nextTab] is defined and an array
+  //       if (Object.keys(prefillDataCache).length > 0) {
+  //         const relevantFields = Array.isArray(applicationData[nextTab])
+  //           ? applicationData[nextTab].map(field => field.risk_parameter_id || field.coverage_parameter_id)
+  //           : []; // Safely handle when applicationData[nextTab] is not an array
+
+  //         const tabData = Object.keys(prefillDataCache)
+  //           .filter(key => relevantFields.includes(key))
+  //           .reduce((obj, key) => {
+  //             obj[key] = prefillDataCache[key];
+  //             return obj;
+  //           }, {});
+
+  //         form.setFieldsValue(tabData); // Set the fields with prefilled data
+  //       } else {
+  //         form.resetFields(); // Reset form fields if no prefilled data
+  //       }
+  //     } else {
+  //       // If on the "Review" tab, simply call onNext() to proceed to the next step
+  //       onNext();  // Proceed to the next step after review
+  //     }
+  //   } catch (errorInfo) {
+  //     console.log('Form validation failed:', errorInfo);
+  //     message.error('Please fill in all required fields correctly.');
   //   }
   // };
 
+
   return (
     <>
-        <Tabs
-            activeKey={currentTab}
-            onChange={setCurrentTab}
-        >
-            <TabPane tab="Risk Values" key="risk_values">
-                {renderFormFields(applicationData.risk_values)}
-            </TabPane>
-            <TabPane tab="Coverage Values" key="coverage_values">
-                {renderFormFields(applicationData.coverage_values)}
-            </TabPane>
-        </Tabs>
+      <Tabs
+        activeKey={currentTab}
+        onChange={setCurrentTab}
+      >
+        <TabPane tab="Risk Values" key="risk_values">
+          {renderFormFields(applicationData.risk_values)}
+        </TabPane>
+        <TabPane tab="Coverage Values" key="coverage_values">
+          {renderFormFields(applicationData.coverage_values)}
+        </TabPane>
+      </Tabs>
 
-        {!isReviewStep && (
-            <div style={{ marginTop: 16, textAlign: 'right' }}>
-                <Button type="primary" onClick={handleNext}>
-                    {currentTab === "risk_values" ? "Update: Coverage Values" : "Review"}
-                </Button>
-            </div>
-        )}
+      {!isReviewStep && (
+        <div style={{ marginTop: 16, textAlign: 'right' }}>
+          <Button type="primary" onClick={handleNext}>
+            {currentTab === "risk_values" ? "Update: Coverage Values" : "Review"}
+          </Button>
+        </div>
+      )}
 
-        {isReviewStep && (
-            <div style={{ marginTop: 16, textAlign: 'right' }}>
-                <Button type="primary" onClick={handleSubmit}>
-                    Submit Application
-                </Button>
-            </div>
-        )}
+      {isReviewStep && (
+        <div style={{ marginTop: 16, textAlign: 'right' }}>
+          <Button type="primary" onClick={handleSubmit}>
+            Submit Application
+          </Button>
+        </div>
+      )}
 
-        <Modal
-            title={submitStatus.type === 'success' ? "Success!" : "Error"}
-            open={isModalVisible}
-            onCancel={() => setIsModalVisible(false)}
-            footer={null}
-            centered
-        >
-            {renderModalContent()}
-        </Modal>
+      <Modal
+        title={submitStatus.type === 'success' ? "Success!" : "Error"}
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        centered
+      >
+        {renderModalContent()}
+      </Modal>
 
-        {renderConfirmationModal()}
+      {renderConfirmationModal()}
     </>
-);
+  );
 };
 export default DynamicForm;

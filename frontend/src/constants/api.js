@@ -3,4 +3,4 @@ export const uploadAccordForm="/uploadPdf";
 export const ContactUsMail = '/contactUs';
 export const getBulkData = '/getBulkData';
 
-export const getPrefill="/getPrefill";
+export const getPrefill="/transform/";
