@@ -51,10 +51,10 @@ export const DashboardCard = styled.div`
   }
   .card-desc-datavalue {
     padding-top: 16px;
-    color: #05004e;
+   color: #04335c;
   }
   .card-desc-datavalue strong {
-    color: #4f4f4f;
+    color: #03676a;
   }
   .card-content {
     margin: 24px 0 0px;
@@ -113,10 +113,10 @@ export const DashboardSection = styled.div`
     }
   }
   .graph-card-datavalue{
-    color:#05004e;
+    color: #04335c;
   }
   .graph-card-strong{
-     color: #4f4f4f;
+     color: #03676a;
   }
   .quick-link {
     border: none;
