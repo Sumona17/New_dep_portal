@@ -4,16 +4,8 @@ import ReactApexChart from "react-apexcharts";
 const AreaChart = ({ data,theme }) => {
   // const months = data.map(item => item.month);
   const months = data.map((item) => item.month);
-  const modeofpayment = data.map((item) => item.modeofpayment);
-  const amountReceived = data.map((item) => parseFloat(item.Amountrecieved));
-
-  // Encode mode of payment to numerical values
-  const modeEncoding = Array.from(new Set(modeofpayment)).reduce((acc, mode, index) => {
-    acc[mode] = index + 1; // Assign a unique number to each mode
-    return acc;
-  }, {});
-  const modeValues = modeofpayment.map((mode) => modeEncoding[mode]);
-
+  const converted = data.map((item) => item.converted);
+  const submitted = data.map((item) => parseFloat(item.submitted));
   const options = {
     chart: {
       type: 'area',
@@ -93,13 +85,13 @@ const AreaChart = ({ data,theme }) => {
   // Chart series
   const series = [
     {
-      name: "Payment Method",
-      data: modeValues,
+      name: "Submitted",
+      data: submitted,
     },
     {
-      name: "Amount Received",
-      data: amountReceived,
-    },
+      name: "Converted",
+      data: converted,
+    }
   ];
 
   return (
