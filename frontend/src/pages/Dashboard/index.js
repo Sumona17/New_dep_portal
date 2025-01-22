@@ -30,13 +30,8 @@ const Dashboard = () => {
   const { theme } = useMetaData();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  // const nfipBindRatio = jsonData.data.map((item) => item.nfip);
-  // const privateFloodBindRatio = jsonData.data.map((item) => item.privateFlood);
-  console.log("jsonData", jsonData);
-  const modeofpayment = jsonData.data.map((item) => item.modeofpayment);
-  console.log("mode of paymennt", modeofpayment);
-  const Amountrecieved = jsonData.data.map((item) => item.Amountrecieved);
-  console.log("Amountrecieved", Amountrecieved);
+  const converted = jsonData.data.map((item) => item.converted);
+  const submitted = jsonData.data.map((item) => item.submitted);
 
   const handleReprintQuote = () => {
     setOpen(true);
@@ -44,13 +39,13 @@ const Dashboard = () => {
 
   const series = [
     {
-      name: "Method",
-      data: modeofpayment,
+      name: "Submitted",
+      data: submitted,
     },
     {
-      name: "Amount Received",
-      data: Amountrecieved,
-    },
+      name: "Converted",
+      data: converted,
+    }
   ];
 
   return (
@@ -89,38 +84,38 @@ const Dashboard = () => {
                       <h5 className="card-title"> Coverage Insights</h5>
                       <div className="card-desc-datavalue">
                         <Row gutter={16}>
-                          <Col span={7}>
+                          <Col span={6}>
                             <strong>Product</strong>
                           </Col>
                           <Col span={9}>
                             <strong>Better Conversion</strong>
                           </Col>
                           <Col span={6}>
-                            <strong>Rated or Referred</strong>
+                            <strong>Rated/Referred</strong>
                           </Col>
                         </Row>
                         <hr />
                         <Row gutter={16}>
                           <Col span={7}>Cyber</Col>
-                          <Col span={9}>$50K - $1mn</Col>
+                          <Col span={8}>$50K - $1mn</Col>
                           <Col span={6}>47%</Col>
                         </Row>
                         <br />
                         <Row gutter={16}>
-                          <Col span={7}>
+                          <Col span={6}>
                             <strong>Product</strong>
                           </Col>
                           <Col span={9}>
                             <strong>Least Conversion</strong>
                           </Col>
                           <Col span={6}>
-                            <strong>Rejected or Abandoned</strong>
+                            <strong>Rejected/Abandoned</strong>
                           </Col>
                         </Row>
                         <hr />
                         <Row gutter={16}>
                           <Col span={7}>Excess Liability</Col>
-                          <Col span={9}>$10mn - $50mn</Col>
+                          <Col span={8}>$10mn - $50mn</Col>
                           <Col span={6}>37%</Col>
                         </Row>
                       </div>
