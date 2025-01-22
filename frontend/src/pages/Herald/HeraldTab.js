@@ -4,14 +4,8 @@ import axios from "axios";
 import FileUploadForm from "./FormPrefill";
 import moment from "moment";
 import { FormInputFeild } from "styles/components/FormControl";
-// import { mockApplicationData } from './mockApplicationData';
-// import { useNavigate } from 'react-router-dom';
-// // import useMetaData from "context/metaData";
-import { useLocation } from "react-router-dom";
-// import useGet from 'hooks/useGet';
-// import usePost from "hooks/usePost";
-// import { getPrefill } from 'constants/api';
-// import pdfData from "../../assets/files/App-Cyber_EDITED.pdf";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -31,7 +25,7 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
   // const [coverageValuesData, ] = useState({});
   //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   // const [prefillDataCache, ] = useState({});
   const [currentTab, setCurrentTab] = useState('risk_values'); // or whatever your tab value is
@@ -195,8 +189,8 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
           },
           { risk_parameter_id: "rsk_6ril_cyb_security_training", value: riskValues["rsk_6ril_cyb_security_training"] || "yes" },
           { risk_parameter_id: "rsk_s9i6_is_franchise", value: riskValues["rsk_s9i6_is_franchise"] || "yes" },
-          { risk_parameter_id: "rsk_jb26_cyb_has_claims_history", value: riskValues["rsk_jb26_cyb_has_claims_history"] || "yes" },
-          { risk_parameter_id: "rsk_o23k_cyb_has_claims_history_within_five_years", value: riskValues["rsk_o23k_cyb_has_claims_history_within_five_years"] || "yes" },
+          { risk_parameter_id: "rsk_jb26_cyb_has_claims_history", value: riskValues["rsk_jb26_cyb_has_claims_history"] || "no" },
+          { risk_parameter_id: "rsk_o23k_cyb_has_claims_history_within_five_years", value: riskValues["rsk_o23k_cyb_has_claims_history_within_five_years"] || "no" },
           {
             risk_parameter_id: "rsk_78cv_cyb_claim_event", value: riskValues["rsk_78cv_cyb_claim_event"] || {
               amount: 71680852,
@@ -204,7 +198,7 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
               date: "2023-01-23"
             }, instance: "cyb_claim_event_1"
           },
-          { risk_parameter_id: "rsk_ggy8_cyb_warranty", value: riskValues["rsk_ggy8_cyb_warranty"] || "yes" },
+          { risk_parameter_id: "rsk_ggy8_cyb_warranty", value: riskValues["rsk_ggy8_cyb_warranty"] || "no" },
           { risk_parameter_id: "rsk_w6ug_herald_attestation", value: riskValues["rsk_w6ug_herald_attestation"] || "agree" }
         ],
         products: state?.selectedProducts || []
@@ -214,7 +208,7 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
 
       // Call PUT method to update application
       const updateResponse = await axios.put(
-        `https://sandbox.heraldapi.com/applications/b110ff4b-e28a-4a8f-9d6a-84a1e1d21328`,
+        `https://sandbox.heraldapi.com/applications/d2dfeaf3-0808-4857-b3ff-300111a7bbc0`,
         updatePayload,
         {
           headers: {
@@ -256,31 +250,19 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
       setIsModalVisible(true);
     }
   };
+ 
   const handleFinalSubmission = async () => {
     try {
-      // Predefined products list
-      //   const products = [
-      //     "prd_0050_herald_cyber",
-      //     "prd_la3v_atbay_cyber",
-      //     "prd_jk0g_cowbell_cyber"
-      //   ];
-
-      // Prepare submission payload
       const submissionPayload = {
-        // id: finalSubmissionData.id, // Use application ID from update response
-        // // products: products,
-        // producer_id: "61584f10-c8ba-42bc-9cf2-c40cda1fcfe8"
-
         "producer_id": "61584f10-c8ba-42bc-9cf2-c40cda1fcfe8",
         "application": {
-          "id": "b110ff4b-e28a-4a8f-9d6a-84a1e1d21328"
+          "id": "d2dfeaf3-0808-4857-b3ff-300111a7bbc0"
         }
-
       };
-
+  
       // Close confirmation modal
       setIsConfirmationModalVisible(false);
-
+  
       // Call POST method for submission
       const submissionResponse = await axios.post(
         "https://sandbox.heraldapi.com/submissions",
@@ -294,196 +276,57 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
           },
         }
       );
-
+  
       if (submissionResponse.data) {
+        const submissionId = submissionResponse.data.submission.id;
+        
         setSubmitStatus({
           type: 'success',
           message: 'Application submitted successfully!',
         });
+        
         setIsModalVisible(true);
+        
+        // Navigate to quote page with submissionId and selected products
+        navigate('/quote-page', {
+          state: {
+            submissionId: submissionId,
+            selectedProducts: selectedProducts // Assuming you have selectedProducts in your state
+          }
+        });
+   
+     
         console.log("Submission Success response:", submissionResponse.data);
       }
     } catch (error) {
       console.error("Full error object:", error);
-
+      
       // Detailed error logging
       if (error.response) {
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
         console.error("Error response headers:", error.response.headers);
       }
-
+  
       // More comprehensive error handling
       const errorMessage = error.response?.data?.errors?.[0]?.message ||
         error.response?.data?.message ||
         'Failed to submit the application. Please try again.';
-
+  
       setSubmitStatus({
         type: 'error',
         message: errorMessage,
       });
-
+  
       setIsModalVisible(true);
     }
   };
-
-
-  //   const handleGetQuote = () => {
-  //     navigate('/quote-page', {
-  //         state: {
-  //             formData: { ...riskValuesData, ...formData?.coverageValues },
-  //             applicationData
-  //         }
-  //     });
-  // }
-
-  // Updated handlePrefill function
-  // Modified handlePrefill function in DynamicForm component
-
-
-  // const handlePrefill = async () => {
-   
-  //   try {
-  //     setLoading(true);
-  
-  //     // Ensure `query` is defined
-  //     const query = { value: "default value" }; // Replace with appropriate initialization or state
-  
-  //     // Ensure `publicData` is defined
-  //     const publicData = false; // Replace with actual logic or value
-  
-  //     // Step 1: Fetch PDF data from the custom API
-  //     const pdfResponse = await axios.post(
-  //       'http://18.206.236.54:5000/api/process_doc',
-  //       {
-  //         query: `Fetch the document and provide a detailed summary and analysis for "${query.value}" along with PDF details.`,
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       }
-  //     );
-  
-  //     let pdfData = [];
-  //     if (pdfResponse.status === 200) {
-  //       // Assuming `pdfResponse.data.results` contains an array of PDF URLs or Base64 data
-  //       pdfData = Array.from(
-  //         new Set(pdfResponse.data.results.map((pdfUrlOrBase64) => pdfUrlOrBase64))
-  //       );
-  
-  //       // Store PDFs in the state or local storage
-  //       if (publicData) {
-  //         const capturedDocuments = JSON.parse(localStorage.getItem('capturedDocuments') || '[]');
-  //         const publicDataPdfs = capturedDocuments.map((data) => data.pdf);
-  //         pdfData = [...pdfData, ...publicDataPdfs];
-  //       }
-  
-  //       setRefDocuments(pdfData); // Update the state with fetched PDFs
-  //     }
-  
-  //     // Step 2: Fetch form data and process prefill
-  //     const formResponse = await axios.get(/* API endpoint for fetching form data */);
-  
-  //     if (formResponse.data && formResponse.data.application) {
-  //       const { risk_values = [], coverage_values = [] } = formResponse.data.application;
-  
-  //       const prefillData = {};
-  
-  //       const processFields = (fields, type) => {
-  //         fields.forEach((field) => {
-  //           const fieldId = field.risk_parameter_id || field.coverage_parameter_id;
-  
-  //           if (!fieldId) {
-  //             console.warn(`Missing field ID for ${type} field:`, field);
-  //             return;
-  //           }
-  
-  //           if (field.value !== undefined) {
-  //             prefillData[fieldId] = field.value;
-  //             return;
-  //           }
-  
-  //           switch (field.input_type) {
-  //             case 'short_text':
-  //               prefillData[fieldId] = field.schema?.default || `Sample ${field.parameter_text?.agent_facing_text || 'Text'}`;
-  //               break;
-  //             case 'integer':
-  //             case 'number':
-  //               prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
-  //               break;
-  //             case 'email':
-  //               prefillData[fieldId] = `sample_${Math.random().toString(36).substring(7)}@example.com`;
-  //               break;
-  //             case 'phone':
-  //               prefillData[fieldId] = `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`;
-  //               break;
-  //             case 'select_one':
-  //               prefillData[fieldId] = field.schema?.default || (field.schema?.enum?.length ? field.schema.enum[0] : null);
-  //               break;
-  //             case 'select_many':
-  //               prefillData[fieldId] = field.schema?.default || (field.schema?.items?.enum?.length ? [field.schema.items.enum[0]] : []);
-  //               break;
-  //             case 'date':
-  //               prefillData[fieldId] = field.schema?.default || moment().format('YYYY-MM-DD');
-  //               break;
-  //             case 'address':
-  //               if (field.schema?.properties) {
-  //                 Object.keys(field.schema.properties).forEach((key) => {
-  //                   const propertySchema = field.schema.properties[key];
-  //                   prefillData[`${fieldId}.${key}`] = propertySchema?.default || propertySchema?.enum?.[0] || `Sample ${propertySchema?.title || key}`;
-  //                 });
-  //               }
-  //               break;
-  //             case 'currency':
-  //               prefillData[fieldId] = field.schema?.default || field.schema?.minimum || 1000;
-  //               break;
-  //             default:
-  //               prefillData[fieldId] = `Sample ${field.parameter_text?.agent_facing_text || 'Field'}`;
-  //           }
-  //         });
-  //       };
-  
-  //       processFields(risk_values, 'Risk');
-  //       processFields(coverage_values, 'Coverage');
-  
-  //       setPrefillDataCache(prefillData);
-  
-  //       const currentTabFields =
-  //         currentTab === 'risk_values'
-  //           ? risk_values.map((f) => f.risk_parameter_id)
-  //           : coverage_values.map((f) => f.coverage_parameter_id);
-  
-  //       const currentTabData = Object.keys(prefillData)
-  //         .filter((key) => currentTabFields.includes(key))
-  //         .reduce((obj, key) => {
-  //           obj[key] = prefillData[key];
-  //           return obj;
-  //         }, {});
-  
-  //       form.setFieldsValue(currentTabData);
-  
-  //       message.success('Form prefilled successfully!');
-  //       window.scrollTo(0, 0);
-  //     } else {
-  //       throw new Error('Invalid API response format');
-  //     }
-  
-  //     // Step 3: Optionally, log or handle the PDF data in conjunction with the form
-  //     console.log('PDF Data:', pdfData);
-  //     console.log('Form prefill data:', formResponse.data);
-  //   } catch (error) {
-  //     console.error('Error during prefill and PDF fetch:', error);
-  //     message.error('Failed to fetch and prefill: ' + (error.response?.data?.message || error.message));
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+ 
   const handleUpdate = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://sandbox.heraldapi.com/applications/f835ece6-bb01-4653-bd53-bbb58d99f2fc",
+        "https://sandbox.heraldapi.com/applications/d2dfeaf3-0808-4857-b3ff-300111a7bbc0",
         {
           headers: {
             Accept: "application/json",
@@ -517,13 +360,6 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
     }
   };
    
-  
-
-
-
-
-
-
   const renderModalContent = () => {
     const isSuccess = submitStatus.type === 'success';
 
@@ -783,24 +619,28 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
             </Select>
           </Form.Item>
         );
-      case "select_many":
-        return (
-          <Form.Item
-            key={fieldKey}
-            name={fieldKey}
-            label={parameter_text.agent_facing_text}
-            rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
-          >
-            <Select placeholder={`Select ${parameter_text.agent_facing_text}`}>
-              {schema.items.enum &&
-                schema.items.enum.map((option) => (
+        case "select_many":
+          return (
+            <Form.Item
+              key={fieldKey}
+              name={fieldKey}
+              label={parameter_text.agent_facing_text}
+              rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
+            >
+              <Select
+                mode="multiple"  // Enable multiple selection
+                placeholder={`Select ${parameter_text.agent_facing_text}`}
+                style={{ width: '100%' }}
+                allowClear  // Allow clearing all selections
+              >
+                {schema.items?.enum?.map((option) => (
                   <Option key={option} value={option}>
                     {option}
                   </Option>
                 ))}
-            </Select>
-          </Form.Item>
-        );
+              </Select>
+            </Form.Item>
+          );
       case "date":
         return (
           <Form.Item
@@ -941,52 +781,6 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
   if (!applicationData) {
     return <p style={{ textAlign: "center", marginTop: "20%" }}>No application data available.</p>;
   }
-
-  // const handleTabChange = async () => {
-  //   try {
-  //     // Validate form fields before proceeding
-  //     const values = await form.validateFields();
-  //     onUpdateFormData(currentTab, values); // Update the form data in parent component
-
-  //     // If we are at "Review" step, just proceed to the next step
-  //     if (currentTab !== "review") {
-  //       // Determine the next tab if it's not the "review" tab
-  //       let nextTab;
-  //       if (currentTab === "risk_values") {
-  //         nextTab = "coverage_values";  // Move from risk_values to coverage_values
-  //       } else if (currentTab === "coverage_values") {
-  //         nextTab = "review"; // Move from coverage_values to review
-  //       }
-
-  //       // Update the current tab (this is for normal tab navigation)
-  //       setCurrentTab(nextTab);
-
-  //       // Check if prefilled data exists and ensure applicationData[nextTab] is defined and an array
-  //       if (Object.keys(prefillDataCache).length > 0) {
-  //         const relevantFields = Array.isArray(applicationData[nextTab])
-  //           ? applicationData[nextTab].map(field => field.risk_parameter_id || field.coverage_parameter_id)
-  //           : []; // Safely handle when applicationData[nextTab] is not an array
-
-  //         const tabData = Object.keys(prefillDataCache)
-  //           .filter(key => relevantFields.includes(key))
-  //           .reduce((obj, key) => {
-  //             obj[key] = prefillDataCache[key];
-  //             return obj;
-  //           }, {});
-
-  //         form.setFieldsValue(tabData); // Set the fields with prefilled data
-  //       } else {
-  //         form.resetFields(); // Reset form fields if no prefilled data
-  //       }
-  //     } else {
-  //       // If on the "Review" tab, simply call onNext() to proceed to the next step
-  //       onNext();  // Proceed to the next step after review
-  //     }
-  //   } catch (errorInfo) {
-  //     console.log('Form validation failed:', errorInfo);
-  //     message.error('Please fill in all required fields correctly.');
-  //   }
-  // };
 
 
   return (

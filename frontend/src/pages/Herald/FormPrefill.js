@@ -10,7 +10,7 @@ const FileUploadForm = ({ form }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const PROD_URL = 'http://34.204.36.193:5000';
+  const PROD_URL = "http://52.23.33.219:5000";
 
   const processFields = (fields, type) => {
     const prefillData = {};
@@ -29,8 +29,12 @@ const FileUploadForm = ({ form }) => {
           prefillData[fieldId] = field.value || "";
           break;
         case "integer":
+          // Convert to number, default to null if empty or invalid
+          prefillData[fieldId] = field.value === "" ? null : parseInt(field.value) || 0;
+          break;
         case "number":
-          prefillData[fieldId] = parseInt(field.value) || 0;
+          // Convert to number, default to null if empty or invalid
+          prefillData[fieldId] = field.value === "" ? null : parseFloat(field.value) || 0;
           break;
         case "email":
           prefillData[fieldId] = field.value ? String(field.value).toLowerCase() : "";
@@ -39,28 +43,26 @@ const FileUploadForm = ({ form }) => {
           prefillData[fieldId] = field.value ? String(field.value).replace(/\D/g, '') : "";
           break;
         case "select_one":
-          if (field.schema?.enum?.includes(field.value)) {
-            prefillData[fieldId] = field.value;
-          } else if (typeof field.value === 'boolean' || /^(yes|no)$/i.test(field.value)) {
-            prefillData[fieldId] = String(field.value).toLowerCase();
-          }
+          // Keep empty string if value is empty, otherwise use the value
+          prefillData[fieldId] = field.value;
           break;
         case "select_many":
-          if (Array.isArray(field.value)) {
-            prefillData[fieldId] = field.value.filter(v => field.schema?.items?.enum?.includes(v));
-          } else {
-            prefillData[fieldId] = [];
-          }
+          // Ensure we always have an array, even if empty
+          prefillData[fieldId] = Array.isArray(field.value) ? field.value : [];
           break;
         case "date":
-          try {
-            prefillData[fieldId] = field.value ? moment(field.value).format("YYYY-MM-DD") : null;
-          } catch {
+          // Handle null/empty dates properly
+          if (field.value && field.value !== "") {
+            try {
+              prefillData[fieldId] = moment(field.value).format("YYYY-MM-DD");
+            } catch {
+              prefillData[fieldId] = null;
+            }
+          } else {
             prefillData[fieldId] = null;
           }
           break;
         case "address":
-          // Handle address fields by creating nested form field names
           if (field.value && typeof field.value === 'object') {
             const addressValue = field.value;
             prefillData[`${fieldId}.line1`] = addressValue.line1 || '';
@@ -72,7 +74,8 @@ const FileUploadForm = ({ form }) => {
           }
           break;
         case "currency":
-          prefillData[fieldId] = parseFloat(field.value) || 0;
+          // Convert to number, default to null if empty or invalid
+          prefillData[fieldId] = field.value === "" ? null : parseFloat(field.value) || 0;
           break;
         default:
           prefillData[fieldId] = field.value || "";
@@ -123,6 +126,9 @@ const FileUploadForm = ({ form }) => {
         ...riskValues,
         ...coverageValues,
       };
+      console.log('Processed risk values:', riskValues);
+      console.log('Processed coverage values:', coverageValues);
+
 
       console.log('Final form values:', formValues);
       form.setFieldsValue(formValues);
