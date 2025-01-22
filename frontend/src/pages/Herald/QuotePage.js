@@ -303,6 +303,7 @@ const QuotePage = () => {
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
+        <h2>View Quote Details</h2>
         {quotes.map((quote) => (
          <Card 
          key={quote.quote_id}
@@ -345,7 +346,7 @@ const QuotePage = () => {
               <Button 
                 icon={<AntCloudOutlined />}
                 onClick={() => window.open(quote.portal_link, '_blank')}
-                disabled={!quote.portal_link}
+                // disabled={!quote.portal_link}
               >
                 View in Carrier Portal
               </Button>

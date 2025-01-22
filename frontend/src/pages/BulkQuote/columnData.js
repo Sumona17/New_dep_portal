@@ -41,12 +41,12 @@ const ColumnData = (selectedRowKey, setSelectedRowKey) => {
             key: "Industry",
             sorter: (a, b) => a.Industry.localeCompare(b.Industry),
         },
-        {
-            title: "Number of Employees",
-            dataIndex: "Number of Employees",
-            key: "Number of Employees",
-            sorter: (a, b) => a[ "Number of Employees"].localeCompare(b["Number of Employees"]),
-        },
+        // {
+        //     title: "Number of Employees",
+        //     dataIndex: "Number of Employees",
+        //     key: "Number of Employees",
+        //     sorter: (a, b) => a[ "Number of Employees"].localeCompare(b["Number of Employees"]),
+        // },
         {
             title: "Total Annual Revenue",
             dataIndex: "Annual Revenue",
