@@ -10,7 +10,7 @@ const FileUploadForm = ({ form }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const PROD_URL = "http://52.23.33.219:5000";
+  const PROD_URL = "http://18.212.95.68:5000";
 
   const processFields = (fields, type) => {
     const prefillData = {};

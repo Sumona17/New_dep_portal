@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Alert, Spin, Typography, Collapse, Space, Tag, Divider, message } from 'antd';
-import { DownloadOutlined, AntCloudOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Card, Button, Alert, Spin, Typography, Collapse, Space,  message, Tag, Divider, Dropdown } from 'antd';
+import { DownloadOutlined, AntCloudOutlined, LoadingOutlined, FileTextOutlined, SecurityScanOutlined, DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -10,12 +10,12 @@ const PRODUCT_NAMES = {
     'prd_0050_herald_cyber': 'Herald Cyber',
     'prd_la3v_atbay_cyber': 'At-Bay Cyber',
     'prd_jk0g_cowbell_cyber': 'Cowbell Cyber',
-    // Add more product mappings as needed
-  };
+};
   
-  const getProductName = (productId) => {
-    return PRODUCT_NAMES[productId] || productId; // Fallback to ID if name not found
-  };
+const getProductName = (productId) => {
+    return PRODUCT_NAMES[productId] || productId;
+};
+
 const QuotePage = () => {
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +23,8 @@ const QuotePage = () => {
   const [, setSubmissionData] = useState(null);
   const [detailedQuoteData, setDetailedQuoteData] = useState({});
   const [loadingQuoteDetails, setLoadingQuoteDetails] = useState({});
+  const [businessName, setBusinessName] = useState('');
+  const [loadedQuoteIds, setLoadedQuoteIds] = useState([]);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +38,14 @@ const QuotePage = () => {
       'Content-Type': 'application/json'
     }
   });
+
+  const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined) return 'N/A';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  };
 
   useEffect(() => {
     const fetchSubmissionData = async () => {
@@ -53,8 +63,33 @@ const QuotePage = () => {
           throw new Error("Invalid submission data received");
         }
 
+        const quotePreviewsWithDetails = await Promise.all(
+          submissionResponse.data.submission.quote_previews.map(async (quote) => {
+            try {
+              const quoteDetails = await api.get(`/quotes/${quote.quote_id}`);
+              return {
+                ...quote,
+                totalPremium: quoteDetails.data.quote.prices?.premium_with_taxes_and_fees || null
+              };
+            } catch (error) {
+              console.error(`Error fetching details for quote ${quote.quote_id}:`, error);
+              return { ...quote, totalPremium: null };
+            }
+          })
+        );
+
         setSubmissionData(submissionResponse.data.submission);
-        setQuotes(submissionResponse.data.submission.quote_previews || []);
+        setQuotes(quotePreviewsWithDetails);
+
+        // Extract business name from first quote's risk values
+        const firstQuoteDetails = await api.get(`/quotes/${submissionResponse.data.submission.quote_previews[0].quote_id}`);
+        const businessRiskValue = firstQuoteDetails.data.quote.risk_values.find(
+          (risk) => risk.risk_parameter_id === "rsk_m4p9_insured_name"
+        )?.value;
+   
+        if (businessRiskValue) {
+          setBusinessName(businessRiskValue);
+        }
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -84,6 +119,7 @@ const QuotePage = () => {
         ...prev,
         [quoteId]: response.data.quote
       }));
+      setLoadedQuoteIds(prev => [...prev, quoteId]);
     } catch (error) {
       console.error("Error fetching quote details:", error);
       message.error(error.message || "Failed to fetch quote details");
@@ -91,7 +127,6 @@ const QuotePage = () => {
       setLoadingQuoteDetails(prev => ({ ...prev, [quoteId]: false }));
     }
   };
-
   const formatValue = (value) => {
     if (value === null || value === undefined) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -110,15 +145,8 @@ const QuotePage = () => {
     }
     return value;
   };
-
-  const formatCurrency = (amount) => {
-    if (amount === null || amount === undefined) return 'N/A';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
-
+ 
+ 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -127,11 +155,11 @@ const QuotePage = () => {
       day: 'numeric'
     });
   };
-
+ 
   const renderQuoteDetails = (quote) => {
     const quoteData = detailedQuoteData[quote.quote_id];
 
-    if (!quoteData) {
+    if (!loadedQuoteIds.includes(quote.quote_id)) {
       return (
         <Button 
           onClick={() => fetchQuoteDetails(quote.quote_id)}
@@ -143,7 +171,6 @@ const QuotePage = () => {
       );
     }
 
-    // Organize data into sections
     const sections = [
       {
         title: "Product Information",
@@ -168,12 +195,12 @@ const QuotePage = () => {
       {
         title: "Pricing Information",
         data: [
-          { 
-            label: "Premium Before Taxes and Fees", 
+          {
+            label: "Premium Before Taxes and Fees",
             value: formatCurrency(quoteData.prices?.premium_before_taxes_and_fees)
           },
-          { 
-            label: "Total Premium", 
+          {
+            label: "Total Premium",
             value: formatCurrency(quoteData.prices?.premium_with_taxes_and_fees)
           }
         ]
@@ -198,7 +225,8 @@ const QuotePage = () => {
           label: "Document",
           value: `${file.text} (${file.type}) - ${file.status}`
         }))
-      }
+      },
+     
     ];
 
     return (
@@ -219,7 +247,6 @@ const QuotePage = () => {
       </Collapse>
     );
   };
-
   const getStatusTag = (status) => {
     const statusConfig = {
       active: { color: 'success', text: 'Active' },
@@ -227,33 +254,60 @@ const QuotePage = () => {
       declined: { color: 'error', text: 'Declined' },
       referral: { color: 'warning', text: 'Referral' }
     };
-
+ 
     const config = statusConfig[status] || { color: 'default', text: status };
     return <Tag color={config.color}>{config.text}</Tag>;
   };
-
-  const handleDownloadQuote = async () => {
+ 
+  const handleDownloadFile = async (quote, fileType) => {
     try {
       setLoading(true);
-      const response = await api.post(
-        "/files/3d7cd53b-f73f-4257-a9ea-8ac955329693/get_temporary_link"
+      // Check if quote status is active
+      if (quote.status !== 'active') {
+        message.error('Quote is not in an active state');
+        return;
+      }
+ 
+      // Fetch quote details if not already loaded
+      if (!detailedQuoteData[quote.quote_id]) {
+        await fetchQuoteDetails(quote.quote_id);
+      }
+ 
+      const quoteData = detailedQuoteData[quote.quote_id];
+     
+      // Find the specific file
+      const file = quoteData.files?.find(
+        f => f.type === fileType && f.status === "available"
       );
-      
-      const pdfUrl = response.data?.temporary_link?.link;
-      if (pdfUrl) {
-        window.open(pdfUrl, '_blank');
-        message.success('PDF opened successfully');
+ 
+      if (!file) {
+        throw new Error(`No ${fileType.replace('_', ' ')} file available`);
+      }
+ 
+      const response = await axios.post(
+        `https://sandbox.heraldapi.com/files/${file.id}/get_temporary_link`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer E4xGG8aD+6kcbID50Z7dfntunn8wsHvXKxb5gBB1pdw=`,
+          },
+        }
+      );
+     
+      const fileUrl = response.data?.temporary_link?.link;
+      if (fileUrl) {
+        window.open(fileUrl, '_blank');
+        message.success(`${fileType.replace('_', ' ').toUpperCase()} opened successfully`);
       } else {
         throw new Error("Failed to retrieve the download link");
       }
     } catch (error) {
-      console.error("Error fetching temporary link:", error);
-      message.error(error.message || "An error occurred while fetching the download link");
+      console.error(`Error fetching ${fileType} link:`, error);
+      message.error(error.message || `An error occurred while fetching the ${fileType} link`);
     } finally {
       setLoading(false);
     }
   };
-
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -261,7 +315,7 @@ const QuotePage = () => {
       </div>
     );
   }
-
+ 
   if (error) {
     return (
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
@@ -279,7 +333,6 @@ const QuotePage = () => {
       </div>
     );
   }
-
   if (!quotes.length) {
     return (
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
@@ -299,58 +352,85 @@ const QuotePage = () => {
       </div>
     );
   }
-
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <h2>View Quote Details</h2>
+        <div>
+          <h2>View Quote Details</h2>
+          <Text type="secondary" style={{fontSize: 18, fontWeight: 500 }}>Business Name: {businessName}</Text>
+        </div>
         {quotes.map((quote) => (
-         <Card 
-         key={quote.quote_id}
-         title={
-           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <Title level={4} style={{ margin: 0 }}>{getProductName(quote.product_id)}</Title>
-             {getStatusTag(quote.status)}
-           </div>
-         }
-       >
-            {quote.status === "rejected" && (
-              <Alert
-                message="Quote has been rejected"
-                type="error"
-                showIcon
-                style={{ marginBottom: 16 }}
-              />
-            )}
-            
-            {loadingQuoteDetails[quote.quote_id] ? (
-              <Spin />
-            ) : (
-              renderQuoteDetails(quote)
-            )}
-            
-            <Space size="middle" style={{ marginTop: 16 }}>
-              <Button 
-                type="primary"
-                disabled={quote.status !== "referral"}
+          <Card 
+            key={quote.quote_id}
+            title={
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Title level={4} style={{ margin: 0 }}>
+                  {getProductName(quote.product_id)}
+                  <Text type="secondary" style={{ marginLeft: 10, color: 'black', fontSize: 20 }}>
+                    {formatCurrency(quote.totalPremium)}
+                  </Text>
+                </Title>
+                {getStatusTag(quote.status)}
+              </div>
+            }
+          >
+           {quote.status === "rejected" && (
+                <Alert
+                  message="Quote has been rejected"
+                  type="error"
+                  showIcon
+                  style={{ marginBottom: 16 }}
+                />
+              )}
+ 
+              {loadingQuoteDetails[quote.quote_id] ? (
+                <Spin />
+              ) : (
+                renderQuoteDetails(quote)
+              )}
+                <Space size="middle" style={{ marginTop: 16 }}>
+                <Button
+                  type="primary"
+                  disabled={quote.status !== "referral"}
+                >
+                  Bind Quote
+                </Button>
+                <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: 'quote_summary',
+                      label: 'Quote Summary',
+                      icon: <DownloadOutlined />,
+                      onClick: () => handleDownloadFile(quote, 'quote_summary')
+                    },
+                    {
+                      key: 'application',
+                      label: 'Application',
+                      icon: <FileTextOutlined />,
+                      onClick: () => handleDownloadFile(quote, 'application')
+                    },
+                    {
+                      key: 'risk_assessment',
+                      label: 'Risk Assessment',
+                      icon: <SecurityScanOutlined />,
+                      onClick: () => handleDownloadFile(quote, 'risk_assessment')
+                    }
+                  ]
+                }}
               >
-                Bind Quote
-              </Button>
-              <Button 
-                icon={<DownloadOutlined />}
-                onClick={handleDownloadQuote}
-                loading={loading}
-              >
-                Download Quote
-              </Button>
-              <Button 
-                icon={<AntCloudOutlined />}
-                onClick={() => window.open(quote.portal_link, '_blank')}
-                // disabled={!quote.portal_link}
-              >
-                View in Carrier Portal
-              </Button>
-            </Space>
+                <Button icon={<DownloadOutlined />}>
+                  Download <DownOutlined />
+                </Button>
+              </Dropdown>
+                <Button
+                  icon={<AntCloudOutlined />}
+                  onClick={() => window.open(quote.portal_link, '_blank')}
+                  disabled={quote.status !== 'active'}
+                >
+                  View in Carrier Portal
+                </Button>
+              </Space>
           </Card>
         ))}
       </Space>

@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Select, DatePicker, Button, message, Spin, Ta
 import axios from "axios";
 import FileUploadForm from "./FormPrefill";
 import moment from "moment";
-import { FormInputFeild } from "styles/components/FormControl";
+
 import { useLocation, useNavigate } from "react-router-dom";
 
 const { TabPane } = Tabs;
@@ -12,7 +12,7 @@ const { Option } = Select;
 // const FormData = require('form-data');
 
 
-const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) => {
+const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
  
   const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -554,7 +554,7 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
 
         // Default `short_text` case for other fields
         return (
-          <FormInputFeild theme={theme}>
+          
             <Form.Item
               key={fieldKey}
               name={fieldKey}
@@ -563,12 +563,12 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
             >
               <Input placeholder={`Enter ${parameter_text.agent_facing_text}`} />
             </Form.Item>
-          </FormInputFeild>
+         
         );
 
       case "integer":
         return (
-          <FormInputFeild theme={theme}>
+         
             <Form.Item
               key={fieldKey}
               name={fieldKey}
@@ -577,7 +577,7 @@ const DynamicForm = ({ state, theme, isReviewStep, onNext, onUpdateFormData }) =
             >
               <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
             </Form.Item>
-          </FormInputFeild>
+        
         );
       case "email":
         return (
