@@ -12,8 +12,8 @@ const { Option } = Select;
 // const FormData = require('form-data');
 
 
-const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
- 
+const DynamicForm = ({ state, isReviewStep, onNext, onUpdateFormData }) => {
+
   const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
   // const [riskValuesData, ] = useState({});
   // const [coverageValuesData, ] = useState({});
   //   const [finalSubmissionData, setFinalSubmissionData] = useState(null);
-  
+
   const navigate = useNavigate();
   const [form] = Form.useForm();
   // const [prefillDataCache, ] = useState({});
@@ -92,22 +92,22 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
       message.error("Failed to fetch industry classification data.");
     }
   };
-    const handleNext = async () => {
-      try {
-          const values = await form.validateFields();
-          onUpdateFormData(currentTab, values);
+  const handleNext = async () => {
+    try {
+      const values = await form.validateFields();
+      onUpdateFormData(currentTab, values);
 
-          if (currentTab === "risk_values") {
-              setCurrentTab("coverage_values");
-          } else if (currentTab === "coverage_values") {
-              onNext(); // Move to next step in parent component
-          }
-      } catch (errorInfo) {
-          console.log('Form validation failed:', errorInfo);
-          message.error('Please fill in all required fields correctly.');
+      if (currentTab === "risk_values") {
+        setCurrentTab("coverage_values");
+      } else if (currentTab === "coverage_values") {
+        onNext(); // Move to next step in parent component
       }
-  }; 
- 
+    } catch (errorInfo) {
+      console.log('Form validation failed:', errorInfo);
+      message.error('Please fill in all required fields correctly.');
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       // Validate and save Coverage Values data
@@ -250,7 +250,7 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
       setIsModalVisible(true);
     }
   };
- 
+
   const handleFinalSubmission = async () => {
     try {
       const submissionPayload = {
@@ -259,10 +259,10 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
           "id": "d2dfeaf3-0808-4857-b3ff-300111a7bbc0"
         }
       };
-  
+
       // Close confirmation modal
       setIsConfirmationModalVisible(false);
-  
+
       // Call POST method for submission
       const submissionResponse = await axios.post(
         "https://sandbox.heraldapi.com/submissions",
@@ -276,17 +276,17 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
           },
         }
       );
-  
+
       if (submissionResponse.data) {
         const submissionId = submissionResponse.data.submission.id;
-        
+
         setSubmitStatus({
           type: 'success',
           message: 'Application submitted successfully!',
         });
-        
+
         setIsModalVisible(true);
-        
+
         // Navigate to quote page with submissionId and selected products
         navigate('/quote-page', {
           state: {
@@ -294,34 +294,34 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
             selectedProducts: selectedProducts // Assuming you have selectedProducts in your state
           }
         });
-   
-     
+
+
         console.log("Submission Success response:", submissionResponse.data);
       }
     } catch (error) {
       console.error("Full error object:", error);
-      
+
       // Detailed error logging
       if (error.response) {
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
         console.error("Error response headers:", error.response.headers);
       }
-  
+
       // More comprehensive error handling
       const errorMessage = error.response?.data?.errors?.[0]?.message ||
         error.response?.data?.message ||
         'Failed to submit the application. Please try again.';
-  
+
       setSubmitStatus({
         type: 'error',
         message: errorMessage,
       });
-  
+
       setIsModalVisible(true);
     }
   };
- 
+
   const handleUpdate = async () => {
     try {
       setLoading(true);
@@ -334,20 +334,20 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
           },
         }
       );
-   
+
       if (response.data && response.data.application) {
         const { risk_values = [] } = response.data.application;
-       
+
         // Create an object to store the field values
         const updatedValues = {};
-       
+
         risk_values.forEach(field => {
           const fieldId = field.risk_parameter_id;
           if (fieldId && field.value !== undefined) {
             updatedValues[fieldId] = field.value;
           }
         });
-   
+
         // Update the form with new values
         form.setFieldsValue(updatedValues);
         message.success("Form updated successfully!");
@@ -359,7 +359,7 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
       setLoading(false);
     }
   };
-   
+
   const renderModalContent = () => {
     const isSuccess = submitStatus.type === 'success';
 
@@ -432,16 +432,16 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
     return (
       <div>
         {currentTab === "risk_values" && (
-  <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-    <FileUploadForm 
-      form={form}
-      applicationData={applicationData} // Pass the full application data
-    />
-    <Button type="primary" onClick={handleUpdate}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+            <FileUploadForm
+              form={form}
+              applicationData={applicationData} // Pass the full application data
+            />
+            <Button type="primary" onClick={handleUpdate}>
               Update
             </Button>
-  </div>
-)}
+          </div>
+        )}
         <Form
           form={form}
           layout="vertical"
@@ -554,30 +554,30 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
 
         // Default `short_text` case for other fields
         return (
-          
-            <Form.Item
-              key={fieldKey}
-              name={fieldKey}
-              label={parameter_text.agent_facing_text}
-              rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
-            >
-              <Input placeholder={`Enter ${parameter_text.agent_facing_text}`} />
-            </Form.Item>
-         
+
+          <Form.Item
+            key={fieldKey}
+            name={fieldKey}
+            label={parameter_text.agent_facing_text}
+            rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
+          >
+            <Input placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+          </Form.Item>
+
         );
 
       case "integer":
         return (
-         
-            <Form.Item
-              key={fieldKey}
-              name={fieldKey}
-              label={parameter_text.agent_facing_text}
-              rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
-            >
-              <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
-            </Form.Item>
-        
+
+          <Form.Item
+            key={fieldKey}
+            name={fieldKey}
+            label={parameter_text.agent_facing_text}
+            rules={[{ required: false, message: `Please enter ${parameter_text.agent_facing_text}` }]}
+          >
+            <InputNumber style={{ width: "100%" }} placeholder={`Enter ${parameter_text.agent_facing_text}`} />
+          </Form.Item>
+
         );
       case "email":
         return (
@@ -619,28 +619,28 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
             </Select>
           </Form.Item>
         );
-        case "select_many":
-          return (
-            <Form.Item
-              key={fieldKey}
-              name={fieldKey}
-              label={parameter_text.agent_facing_text}
-              rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
+      case "select_many":
+        return (
+          <Form.Item
+            key={fieldKey}
+            name={fieldKey}
+            label={parameter_text.agent_facing_text}
+            rules={[{ required: false, message: `Please select ${parameter_text.agent_facing_text}` }]}
+          >
+            <Select
+              mode="multiple"  // Enable multiple selection
+              placeholder={`Select ${parameter_text.agent_facing_text}`}
+              style={{ width: '100%' }}
+              allowClear  // Allow clearing all selections
             >
-              <Select
-                mode="multiple"  // Enable multiple selection
-                placeholder={`Select ${parameter_text.agent_facing_text}`}
-                style={{ width: '100%' }}
-                allowClear  // Allow clearing all selections
-              >
-                {schema.items?.enum?.map((option) => (
-                  <Option key={option} value={option}>
-                    {option}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          );
+              {schema.items?.enum?.map((option) => (
+                <Option key={option} value={option}>
+                  {option}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        );
       case "date":
         return (
           <Form.Item
@@ -726,8 +726,8 @@ const DynamicForm = ({ state,  isReviewStep, onNext, onUpdateFormData }) => {
             })}
           </div>
         );
-     
-        case "currency": // New case for currency input type
+
+      case "currency": // New case for currency input type
         return (
           <Form.Item
             key={fieldKey}
