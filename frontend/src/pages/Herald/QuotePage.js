@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Alert, Spin, Typography, Collapse, Space,  message, Tag, Divider, Dropdown } from 'antd';
+import { Card, Button, Alert, Spin, Typography, Collapse, Space, message, Tag, Divider, Dropdown } from 'antd';
 import { DownloadOutlined, AntCloudOutlined, LoadingOutlined, FileTextOutlined, SecurityScanOutlined, DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,13 +7,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const PRODUCT_NAMES = {
-    'prd_0050_herald_cyber': 'Herald Cyber',
-    'prd_la3v_atbay_cyber': 'At-Bay Cyber',
-    'prd_jk0g_cowbell_cyber': 'Cowbell Cyber',
+  'prd_0050_herald_cyber': 'Herald Cyber',
+  'prd_la3v_atbay_cyber': 'At-Bay Cyber',
+  'prd_jk0g_cowbell_cyber': 'Cowbell Cyber',
 };
-  
+
 const getProductName = (productId) => {
-    return PRODUCT_NAMES[productId] || productId;
+  return PRODUCT_NAMES[productId] || productId;
 };
 
 const QuotePage = () => {
@@ -25,10 +25,10 @@ const QuotePage = () => {
   const [loadingQuoteDetails, setLoadingQuoteDetails] = useState({});
   const [businessName, setBusinessName] = useState('');
   const [loadedQuoteIds, setLoadedQuoteIds] = useState([]);
-  
+
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const submissionId = location.state?.submissionId;
 
   const api = axios.create({
@@ -58,7 +58,7 @@ const QuotePage = () => {
         }
 
         const submissionResponse = await api.get(`/submissions/${submissionId}`);
-        
+
         if (!submissionResponse.data?.submission) {
           throw new Error("Invalid submission data received");
         }
@@ -83,10 +83,12 @@ const QuotePage = () => {
 
         // Extract business name from first quote's risk values
         const firstQuoteDetails = await api.get(`/quotes/${submissionResponse.data.submission.quote_previews[0].quote_id}`);
-        const businessRiskValue = firstQuoteDetails.data.quote.risk_values.find(
+        // Add null check for risk_values before using find()
+        const riskValues = firstQuoteDetails.data.quote.risk_values || [];
+        const businessRiskValue = riskValues.find(
           (risk) => risk.risk_parameter_id === "rsk_m4p9_insured_name"
         )?.value;
-   
+
         if (businessRiskValue) {
           setBusinessName(businessRiskValue);
         }
@@ -94,7 +96,7 @@ const QuotePage = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error.message || "Failed to fetch data");
-        
+
         if (error.message === "No submission ID provided") {
           navigate('/bulk-quote');
         }
@@ -110,11 +112,11 @@ const QuotePage = () => {
     setLoadingQuoteDetails(prev => ({ ...prev, [quoteId]: true }));
     try {
       const response = await api.get(`/quotes/${quoteId}`);
-      
+
       if (!response.data?.quote) {
         throw new Error("Invalid quote details received");
       }
-      
+
       setDetailedQuoteData(prev => ({
         ...prev,
         [quoteId]: response.data.quote
@@ -145,8 +147,8 @@ const QuotePage = () => {
     }
     return value;
   };
- 
- 
+
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -155,13 +157,13 @@ const QuotePage = () => {
       day: 'numeric'
     });
   };
- 
+
   const renderQuoteDetails = (quote) => {
     const quoteData = detailedQuoteData[quote.quote_id];
 
     if (!loadedQuoteIds.includes(quote.quote_id)) {
       return (
-        <Button 
+        <Button
           onClick={() => fetchQuoteDetails(quote.quote_id)}
           loading={loadingQuoteDetails[quote.quote_id]}
           style={{ marginBottom: 16 }}
@@ -226,7 +228,7 @@ const QuotePage = () => {
           value: `${file.text} (${file.type}) - ${file.status}`
         }))
       },
-     
+
     ];
 
     return (
@@ -254,11 +256,11 @@ const QuotePage = () => {
       declined: { color: 'error', text: 'Declined' },
       referral: { color: 'warning', text: 'Referral' }
     };
- 
+
     const config = statusConfig[status] || { color: 'default', text: status };
     return <Tag color={config.color}>{config.text}</Tag>;
   };
- 
+
   const handleDownloadFile = async (quote, fileType) => {
     try {
       setLoading(true);
@@ -267,23 +269,23 @@ const QuotePage = () => {
         message.error('Quote is not in an active state');
         return;
       }
- 
+
       // Fetch quote details if not already loaded
       if (!detailedQuoteData[quote.quote_id]) {
         await fetchQuoteDetails(quote.quote_id);
       }
- 
+
       const quoteData = detailedQuoteData[quote.quote_id];
-     
+
       // Find the specific file
       const file = quoteData.files?.find(
         f => f.type === fileType && f.status === "available"
       );
- 
+
       if (!file) {
         throw new Error(`No ${fileType.replace('_', ' ')} file available`);
       }
- 
+
       const response = await axios.post(
         `https://sandbox.heraldapi.com/files/${file.id}/get_temporary_link`,
         null,
@@ -293,7 +295,7 @@ const QuotePage = () => {
           },
         }
       );
-     
+
       const fileUrl = response.data?.temporary_link?.link;
       if (fileUrl) {
         window.open(fileUrl, '_blank');
@@ -315,7 +317,7 @@ const QuotePage = () => {
       </div>
     );
   }
- 
+
   if (error) {
     return (
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
@@ -357,10 +359,10 @@ const QuotePage = () => {
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <div>
           <h2>View Quote Details</h2>
-          <Text type="secondary" style={{fontSize: 18, fontWeight: 500 }}>Business Name: {businessName}</Text>
+          <Text type="secondary" style={{ fontSize: 18, fontWeight: 500 }}>Business Name: {businessName}</Text>
         </div>
         {quotes.map((quote) => (
-          <Card 
+          <Card
             key={quote.quote_id}
             title={
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -374,28 +376,28 @@ const QuotePage = () => {
               </div>
             }
           >
-           {quote.status === "rejected" && (
-                <Alert
-                  message="Quote has been rejected"
-                  type="error"
-                  showIcon
-                  style={{ marginBottom: 16 }}
-                />
-              )}
- 
-              {loadingQuoteDetails[quote.quote_id] ? (
-                <Spin />
-              ) : (
-                renderQuoteDetails(quote)
-              )}
-                <Space size="middle" style={{ marginTop: 16 }}>
-                <Button
-                  type="primary"
-                  disabled={quote.status !== "referral"}
-                >
-                  Bind Quote
-                </Button>
-                <Dropdown
+            {quote.status === "rejected" && (
+              <Alert
+                message="Quote has been rejected"
+                type="error"
+                showIcon
+                style={{ marginBottom: 16 }}
+              />
+            )}
+
+            {loadingQuoteDetails[quote.quote_id] ? (
+              <Spin />
+            ) : (
+              renderQuoteDetails(quote)
+            )}
+            <Space size="middle" style={{ marginTop: 16 }}>
+              <Button
+                type="primary"
+                disabled={quote.status !== "referral"}
+              >
+                Bind Quote
+              </Button>
+              <Dropdown
                 menu={{
                   items: [
                     {
@@ -423,14 +425,14 @@ const QuotePage = () => {
                   Download <DownOutlined />
                 </Button>
               </Dropdown>
-                <Button
-                  icon={<AntCloudOutlined />}
-                  onClick={() => window.open(quote.portal_link, '_blank')}
-                  disabled={quote.status !== 'active'}
-                >
-                  View in Carrier Portal
-                </Button>
-              </Space>
+              <Button
+                icon={<AntCloudOutlined />}
+                onClick={() => window.open(quote.portal_link, '_blank')}
+                disabled={quote.status !== 'active'}
+              >
+                View in Carrier Portal
+              </Button>
+            </Space>
           </Card>
         ))}
       </Space>
