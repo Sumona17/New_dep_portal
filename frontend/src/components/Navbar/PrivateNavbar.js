@@ -152,62 +152,62 @@ export default function PrivateNavbar() {
           label: "Create quote",
           key: "submenu",
           children: [
-            {
-              label: "Commercial Auto",
-              key: "commauto",
-            },
-            {
-              label: "Flood",
-              key: "flood",
-            },
-            {
-              label: "HomeOwners",
-              key: "homeowners",
-            },
+            // {
+            //   label: "Commercial Auto",
+            //   key: "commauto",
+            // },
+            // {
+            //   label: "Flood",
+            //   key: "flood",
+            // },
+            // {
+            //   label: "HomeOwners",
+            //   key: "homeowners",
+            // },
             {
               label: "Cyber",
               key: "cyber",
             }
           ],
         },
-        {
-          label: "Automatic quote",
-          key: "automaticquote",
-        },
+        // {
+        //   label: "Automatic quote",
+        //   key: "automaticquote",
+        // },
         {
           label: "Bulk Quote",
           key: "bulkquote",
         },
       ],
     },
-    {
-      label: "Policy",
-      key: "searchpolicy",
-    },
-    {
-      label: "Customer",
-      key: "customer"
-    },
-    {
-      label: "Documents",
-      key: "documents",
-    },
-    {
-      label: "Claim",
-      key: "claim",
-    },
-    {
-      label: "Reporting & analytics",
-      key: "reportingAnalytics",
-    },
-    {
-      label: "Commissions",
-      key: "commissions"
-    },
-    {
-      label: "Admin",
-      key: "admin"
-    },
+    // {
+    //   label: "Policy",
+    //   key: "searchpolicy",
+    // },
+    // {
+    //   label: "Customer",
+    //   key: "customer"
+    // },
+    // {
+    //   label: "Documents",
+    //   key: "documents",
+    // },
+    // {
+    //   label: "Claim",
+    //   key: "claim",
+    // },
+    // {
+    //   label: "Reporting & analytics",
+    //   key: "reportingAnalytics",
+    // },
+    // {
+    //   label: "Commissions",
+    //   key: "commissions"
+    // },
+    // {
+    //   label: "Admin",
+    //   key: "admin"
+    // },
     // {
     //   label: "Home Owners",
     //   key: "homeowners"
